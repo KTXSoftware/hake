@@ -1,0 +1,15 @@
+
+/proto/win32/win32.sdf
+/proto/win32/ipch
+*.suo
+*.user
+/proto/PS3/PS3_Debug
+/proto/PS3/PS3.sdf
+/build
+/build-backup/Debug
+/build-backup/Release
+/build-backup/kake.opensdf
+
+/build-backup/kake.sdf
+
+/build
