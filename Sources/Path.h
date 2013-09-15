@@ -6,6 +6,7 @@ namespace kake {
 	struct Path {
 		Path resolve(std::string subpath);
 		Path resolve(Path subpath);
+		Path parent();
 		std::string toString();
 		Path toAbsolutePath();
 		bool startsWith(Path other);

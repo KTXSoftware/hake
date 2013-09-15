@@ -9,7 +9,7 @@ namespace kake {
 
 	class Exporter {
 	public:
-		virtual void exportSolution(Path directory, Platform platform) = 0;
+		virtual void exportSolution(Platform platform, Path haxeDirectory) = 0;
 	protected:
 		void writeFile(Path file);
 		void closeFile();

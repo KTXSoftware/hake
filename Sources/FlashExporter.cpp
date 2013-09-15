@@ -1,5 +1,8 @@
 #include "FlashExporter.h"
 #include "Files.h"
+#include "ImageTool.h"
+#include "SoundTool.h"
+#include <sstream>
 
 using namespace hake;
 using namespace kake;
@@ -8,7 +11,7 @@ FlashExporter::FlashExporter(kake::Path directory) : directory(directory) {
 	
 }
 
-void FlashExporter::exportSolution(Path directory, Platform platform) {
+void FlashExporter::exportSolution(Platform platform, Path haxeDirectory) {
 	createDirectory(directory.resolve("build"));
 		
 	writeFile(directory.resolve(Paths::get("build", "Project.hxproj")));
@@ -20,13 +23,17 @@ void FlashExporter::exportSolution(Path directory, Platform platform) {
 		p("<movie input=\"\" />", 2);
 		p("<movie path=\"bin\\sml.swf\" />", 2);
 		p("<movie fps=\"60\" />", 2);
-	//	p(std::string("<movie width=\"") + width + "\" />", 2);
-	//	p(std::string("<movie height=\"") + height + "\" />", 2);
+		std::stringstream w;
+		w << "<movie width=\"" << width << "\" />";
+		p(w.str(), 2);
+		std::stringstream h;
+		h << "<movie height=\"" << height << "\" />";
+		p(h.str(), 2);
 		p("<movie version=\"11\" />", 2);
 		p("<movie minorVersion=\"0\" />", 2);
 		p("<movie platform=\"Flash Player\" />", 2);
 		p("<movie background=\"#FFFFFF\" />", 2);
-	//	if (Files::isDirectory(Configuration.getProjectsDirectory().resolve(Paths::get("Externals", "haxe")))) p("<movie preferredSDK=\"" + Configuration.getProjectsDirectory().resolve(Paths::get("Externals", "haxe")).toString() + "\" />", 2);
+		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"" + haxeDirectory.toString() + "\" />", 2);
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
@@ -73,18 +80,18 @@ void FlashExporter::exportSolution(Path directory, Platform platform) {
 	closeFile();
 }
 
-void FlashExporter::copyMusic(Path from, Path to) {
-	//SoundTool.convertToMP3(directory, directory.resolve(from.toString() + ".wav"), directory.resolve(Paths.get("build", "bin")).resolve(to.toString() + ".mp3"));
+void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
-void FlashExporter::copySound(Path from, Path to) {
-	//SoundTool.convertToMP3(directory, directory.resolve(from.toString() + ".wav"), directory.resolve(Paths.get("build", "bin")).resolve(to.toString() + ".mp3"));
+void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
-void FlashExporter::copyImage(Path from, Path to, const Json::Value& asset) {
-	//ImageTool.export(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
+void FlashExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
+	exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
 }
 
-void FlashExporter::copyBlob(Path from, Path to) {
+void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to));
 }

@@ -12,10 +12,10 @@ namespace hake {
 		KhaExporter();
 		static void copyFile(kake::Path from, kake::Path to);
 		void setWidthAndHeight(int width, int height);
-		virtual void copyImage(kake::Path from, kake::Path to, const Json::Value& asset);
-		virtual void copyMusic(kake::Path from, kake::Path to);
-		virtual void copySound(kake::Path from, kake::Path to);
-		virtual void copyBlob(kake::Path from, kake::Path to);
+		virtual void copyImage(kake::Platform platform, kake::Path from, kake::Path to, Json::Value& asset);
+		virtual void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder);
+		virtual void copySound(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder);
+		virtual void copyBlob(kake::Platform platform, kake::Path from, kake::Path to);
 	protected:
 		static std::string getCurrentDirectoryName(kake::Path directory);
 		static void copyDirectory(kake::Path from, kake::Path to);

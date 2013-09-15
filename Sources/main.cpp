@@ -1,3 +1,4 @@
+#include "Execute.h"
 #include "FileReader.h"
 #include "Files.h"
 #include "Options.h"
@@ -90,65 +91,44 @@ namespace {
 				return "unknown";
 		}
 	}
-
-	void executeSync(const char* command) {
-#ifdef SYS_WINDOWS
-		STARTUPINFOA startupInfo;
-		PROCESS_INFORMATION processInfo;
-		memset(&startupInfo, 0, sizeof(startupInfo));
-		memset(&processInfo, 0, sizeof(processInfo));
-		startupInfo.cb = sizeof(startupInfo);
-		CreateProcessA(nullptr, (char*)command, nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, nullptr, nullptr, &startupInfo, &processInfo);
-		WaitForSingleObject(processInfo.hProcess, INFINITE);
-		CloseHandle(processInfo.hProcess);
-		CloseHandle(processInfo.hThread);
-#else
-		system(command);
-#endif
-	}
 }
-	void compileShader(std::string type, std::string from, std::string to, std::string temp) {
+
+	void compileShader(std::string type, Path from, Path to, Path temp) {
+		if (koreDir.toString().size() > 0) {
 #ifdef SYS_WINDOWS
-		if (koreDir.toString().size() > 0) {
 			Path path = koreDir.resolve(Paths::get("Tools", "kfx", "kfx.exe"));
-			std::string exe = path.toString() + " " + type + " " + from + " " + to + " " + temp;
-			executeSync(exe.c_str());
-		}
-#endif
-#ifdef SYS_OSX
-		if (koreDir.toString().size() > 0) {
+#elif defined SYS_OSX
 			Path path = koreDir.resolve(Paths::get("Tools", "kfx", "kfx-osx"));
-			std::string exe = path.toString() + " " + type + " " + from + " " + to + " " + temp;
-			system(exe.c_str());
-		}
-#endif
-#ifdef SYS_LINUX
-		if (koreDir.toString().size() > 0) {
+#elif defined SYS_LINUX
 			Path path = koreDir.resolve(Paths::get("Tools", "kfx", "kfx-linux"));
-			std::string exe = path.toString() + " " + type + " " + from + " " + to + " " + temp;
-			system(exe.c_str());
-		}
 #endif
+			executeSync(path.toString() + " " + type + " " + from.toString() + " " + to.toString() + " " + temp.toString());
+		}
 	}
 
 namespace {
-	void addShaders(Json::Data& project, Path directory, Path shaderPath) {
+	void addShaders(Platform platform, Json::Data& project, Path directory, Path shaderPath) {
 		if (!Files::isDirectory(shaderPath)) return;
 		Files::createDirectories(directory.resolve(Paths::get("build", "bin")));
-		//for (Path shader : Files::newDirectoryStream(shaderPath)) {
-		//	std::string name = shader.getFileName().toString();
-		//	if (!endsWith(name, ".glsl")) continue;
-		//	name = name.substring(0, name.lastIndexOf('.'));
-		//	switch (Options.Platform) {
-		//	case Flash: {
-		//		compileShader("agal", shader, directory.resolve(Paths::get("build", "bin", name + ".agal")), directory.resolve(Paths::get("build", "temp")));
-		//		Shader s = new Shader();
-		//		Json::Object s;
-		//		s.add("file",  name + ".agal");
-		//		s.add("name", name);
-		//		project.shaders.add(s);
-		//		break;
-		//	}
+		auto shaders = Files::newDirectoryStream(shaderPath);
+		for (Path shader : shaders) {
+			std::string name = shader.getFileName();
+			if (!endsWith(name, ".glsl")) continue;
+			name = name.substr(0, lastIndexOf(name, '.'));
+			switch (platform) {
+			case Flash: {
+				//compileShader("agal", shader, directory.resolve(Paths::get("build", "bin", name + ".agal")), directory.resolve(Paths::get("build", "temp")));
+				std::map<std::string, Json::Value*> values;
+				values["file"] = new Json::String(name + ".agal");
+				values["name"] = new Json::String(name);
+				Json::Object* s = new Json::Object(values);
+				if (!project.has("shaders")) {
+					std::vector<Json::Value*> novalues;
+					project.add("shaders", new Json::Array(novalues));
+				}
+				project["shaders"].add(s);
+				break;
+			}
 		//	case HTML5:
 		//	case Android:
 		//	case iOS: {
@@ -201,14 +181,14 @@ namespace {
 		//		project.shaders.add(s);
 		//		break;
 		//	}
-		//	default:
-		//		break;
-		//	}
-		//}
+			default:
+				break;
+			}
+		}
 	}
 
-	std::string exportKhaProject(Path directory, Platform platform) {
-		std::cout << "Generating Kha solution." << std::endl;
+	std::string exportKhaProject(Path directory, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+		std::cout << "Generating Kha project." << std::endl;
 		KhaExporter* exporter = nullptr;
 		switch (platform) {
 		case Flash:
@@ -239,29 +219,33 @@ namespace {
 		
 		if (Files::exists(directory.resolve("project.kha"))) {
 			Kore::FileReader reader(directory.resolve("project.kha").toString().c_str());
-			Json::Data project((char*)reader.readAll());
+			char* content = (char*)reader.readAll();
+			char* text = new char[reader.size() + 1];
+			for (int i = 0; i < reader.size(); ++i) text[i] = content[i];
+			text[reader.size()] = 0;
+			Json::Data project(text);
 
 			exporter->setWidthAndHeight(project["game"]["width"].number(), project["game"]["height"].number());
 
 			for (int i = 0; i < project["assets"].size(); ++i) {
-				auto asset = project["assets"][i];
-				if      (asset["type"].string() == "image") exporter->copyImage(Paths::get("Assets", "Graphics", asset["file"].string()), Paths::get(asset["file"].string()), asset);
-				else if (asset["type"].string() == "music") exporter->copyMusic(Paths::get("Assets", "Sound", asset["file"].string()), Paths::get(asset["file"].string()));
-				else if (asset["type"].string() == "sound") exporter->copySound(Paths::get("Assets", "Sound", asset["file"].string()), Paths::get(asset["file"].string()));
-				else if (asset["type"].string() == "blob")  exporter->copyBlob(Paths::get("Assets", asset["file"].string()), Paths::get(asset["file"].string()));
+				Json::Value& asset = project["assets"][i];
+				if      (asset["type"].string() == "image") exporter->copyImage(platform, Paths::get("Assets", "Graphics", asset["file"].string()), Paths::get(asset["file"].string()), asset);
+				else if (asset["type"].string() == "music") exporter->copyMusic(platform, Paths::get("Assets", "Sound", asset["file"].string()), Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
+				else if (asset["type"].string() == "sound") exporter->copySound(platform, Paths::get("Assets", "Sound", asset["file"].string()), Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
+				else if (asset["type"].string() == "blob")  exporter->copyBlob(platform, Paths::get("Assets", asset["file"].string()), Paths::get(asset["file"].string()));
 			}
 			
 			//if (Tools.isWindows()) {
-				addShaders(project, directory, directory.resolve(Paths::get("Sources", "Shaders")));
-				addShaders(project, directory, directory.resolve(Paths::get("Kha", "Sources", "Shaders")));
+				addShaders(platform, project, directory, directory.resolve(Paths::get("Sources", "Shaders")));
+				addShaders(platform, project, directory, directory.resolve(Paths::get("Kha", "Sources", "Shaders")));
 			//}
 			
 			Path temp = directory.resolve(Paths::get("build", "temp"));
 			if (!Files::exists(temp)) Files::createDirectories(temp);
-		//	saveJson(project, directory.resolve(Paths::get("build", "temp", "project.kha")));
-			exporter->copyBlob(Paths::get("build", "temp", "project.kha"), Paths::get("project.kha"));
+			project.save(directory.resolve(Paths::get("build", "temp", "project.kha")));
+			exporter->copyBlob(platform, Paths::get("build", "temp", "project.kha"), Paths::get("project.kha"));
 		}
-		exporter->exportSolution(directory, platform);
+		exporter->exportSolution(platform, haxeDirectory);
 		
 		std::string name = directory.getFileName();
 		
@@ -340,9 +324,9 @@ namespace {
 		return Files::exists(directory.resolve("Kha"));
 	}
 
-	std::string exportProject(Path directory, Platform platform) {
+	std::string exportProject(Path directory, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 		if (isKhaProject(directory)) {
-			return exportKhaProject(directory, platform);
+			return exportKhaProject(directory, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder);
 		}
 		else {
 			std::cerr << "Kha directory not found." << std::endl;
@@ -354,15 +338,20 @@ namespace {
 int main(int argc, char** argv) {
 	Random::init(rand());
 	std::string path = ".";
-	#ifdef SYS_WINDOWS
+	
+#ifdef SYS_WINDOWS
 	Platform platform = Platform::Windows;
-	#endif
-	#ifdef SYS_LINUX
+#elif defined SYS_LINUX
 	Platform platform = Platform::Linux;
-	#endif
-	#ifdef SYS_OSX
+#elif defined SYS_OSX
 	Platform platform = Platform::OSX;
-	#endif
+#endif
+
+	Path haxeDirectory;
+	std::string oggEncoder;
+	std::string aacEncoder;
+	std::string mp3Encoder;
+
 	for (int i = 1; i < argc; ++i) {
 		std::string arg(argv[i]);
 		if (arg == "windows") platform = Windows;
@@ -374,13 +363,18 @@ int main(int argc, char** argv) {
 		else if (arg == "osx") platform = OSX;
 		else if (arg == "ios") platform = iOS;
 		else if (arg == "html5") platform = HTML5;
+		else if (arg == "flash") platform = Flash;
 
 		else if (arg == "pch") Options::setPrecompiledHeaders(true);
 		else if (startsWith(arg, "intermediate=")) Options::setIntermediateDrive(arg.substr(13));
 		else if (startsWith(arg, "gfx=")) Options::setGraphicsApi(arg.substr(4));
 		else if (startsWith(arg, "vs=")) Options::setVisualStudioVersion(arg.substr(3));
+		else if (startsWith(arg, "haxe=")) haxeDirectory = Paths::get(arg.substr(5));
+		else if (startsWith(arg, "ogg=")) oggEncoder = arg.substr(4);
+		else if (startsWith(arg, "aac=")) aacEncoder = arg.substr(4);
+		else if (startsWith(arg, "mp3=")) mp3Encoder = arg.substr(4);
 
 		else path = arg;
 	}
-	exportProject(Paths::get(path), platform);
+	exportProject(Paths::get(path), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder);
 }

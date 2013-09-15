@@ -2,6 +2,7 @@
 #include "Files.h"
 
 using namespace hake;
+using namespace kake;
 
 KhaExporter::KhaExporter() : width(640), height(480) {
 
@@ -32,7 +33,7 @@ void KhaExporter::setWidthAndHeight(int width, int height) {
 	this->height = height;
 }
 
-void KhaExporter::copyImage(kake::Path from, kake::Path to, const Json::Value& asset) { }
-void KhaExporter::copyMusic(kake::Path from, kake::Path to) { }
-void KhaExporter::copySound(kake::Path from, kake::Path to) { }
-void KhaExporter::copyBlob(kake::Path from, kake::Path to) { }
+void KhaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) { }
+void KhaExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
+void KhaExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
+void KhaExporter::copyBlob(Platform platform, Path from, Path to) { }

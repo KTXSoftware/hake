@@ -1,5 +1,7 @@
 #include "KoreExporter.h"
 #include "Files.h"
+#include "ImageTool.h"
+#include "SoundTool.h"
 
 using namespace hake;
 using namespace kake;
@@ -8,7 +10,7 @@ KoreExporter::KoreExporter(Path directory) : directory(directory) {
 	
 }
 	
-void KoreExporter::exportSolution(Path directory, Platform platform) {
+void KoreExporter::exportSolution(Platform platform, Path haxeDirectory) {
 	createDirectory(directory.resolve("build"));
 		
 	writeFile(directory.resolve(Paths::get("build", "Project.hxproj")));
@@ -26,7 +28,7 @@ void KoreExporter::exportSolution(Path directory, Platform platform) {
 		p("<movie minorVersion=\"0\" />", 2);
 		p("<movie platform=\"C++\" />", 2);
 		p("<movie background=\"#FFFFFF\" />", 2);
-	//	if (Files::isDirectory(Configuration.getProjectsDirectory().resolve(Paths::get("Externals", "haxe")))) p("<movie preferredSDK=\"" + Configuration.getProjectsDirectory().resolve(Paths::get("Externals", "haxe")).toString() + "\" />", 2);
+		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"" + haxeDirectory.toString() + "\" />", 2);
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
@@ -70,22 +72,22 @@ void KoreExporter::exportSolution(Path directory, Platform platform) {
 	closeFile();
 }
 	
-void KoreExporter::copyMusic(Path from, Path to) {
-	//if (Options.Platform == Platform.Android) SoundTool.convertToOgg(directory, directory.resolve(from + ".wav"), directory.resolve(Paths::get("build", "assets")).resolve(to + ".ogg"));
-	//else SoundTool.convertToOgg(directory, directory.resolve(from + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to + ".ogg"));
+void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	if (platform == Android)  convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "assets")).resolve(to.toString() + ".ogg"), oggEncoder);
+	else convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".ogg"), oggEncoder);
 }
 
-void KoreExporter::copySound(Path from, Path to) {
-	//if (Options.Platform == Platform.Android) copyFile(directory.resolve(from + ".wav"), directory.resolve(Paths::get("build", "assets")).resolve(to + ".wav"));
-	//else copyFile(directory.resolve(from + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to + ".wav"));
+void KoreExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	if (platform == Android) copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "assets")).resolve(to.toString() + ".wav"));
+	else copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".wav"));
 }
 
-void KoreExporter::copyImage(Path from, Path to, const Json::Value& asset) {
-	//if (Options.Platform == Platform.Android) ImageTool.export(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to), asset);
-	//else ImageTool.export(directory.resolve(from), directory.resolve(Paths.get("build", "bin")).resolve(to), asset);
+void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
+	if (platform == Android) exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to), asset);
+	else exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
 }
 
-void KoreExporter::copyBlob(Path from, Path to) {
-	//if (Options.Platform == Platform.Android) copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to));
-	//else copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to));
+void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
+	if (platform == Android) copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to));
+	else copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to));
 }
