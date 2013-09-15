@@ -1,4 +1,5 @@
 #include "DalvikExporter.h"
+#include "Ball.h"
 #include "ImageTool.h"
 #include "SoundTool.h"
 
@@ -139,9 +140,9 @@ void DalvikExporter::exportEclipseProject() {
 	createDirectory(directory.resolve(Paths::get("build", "res", "drawable-mdpi")));
 	createDirectory(directory.resolve(Paths::get("build", "res", "drawable-ldpi")));
 	
-	//Ball.the().exportTo(directory.resolve(Paths.get("build", "res", "drawable-hdpi", "icon.png")), 72, 72, null, directory);
-	//Ball.the().exportTo(directory.resolve(Paths.get("build", "res", "drawable-mdpi", "icon.png")), 48, 48, null, directory);
-	//Ball.the().exportTo(directory.resolve(Paths.get("build", "res", "drawable-ldpi", "icon.png")), 36, 36, null, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-hdpi", "icon.png")), 72, 72, Color::transparent, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-mdpi", "icon.png")), 48, 48, Color::transparent, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-ldpi", "icon.png")), 36, 36, Color::transparent, directory);
 	
 	createDirectory(directory.resolve(Paths::get("build", "res", "layout")));
 	

@@ -58,10 +58,30 @@ void PlayStationMobileExporter::copyBlob(Platform platform, Path from, Path to) 
 }
 
 void PlayStationMobileExporter::exportResources() {
-	//Tools.copyFile(getClass().getResourceAsStream("/com/ktxsoftware/pss/Simple.fcg"), directory.resolve(Paths.get("build", "shaders", "Simple.fcg")));
-	//Tools.copyFile(getClass().getResourceAsStream("/com/ktxsoftware/pss/Simple.vcg"), directory.resolve(Paths.get("build", "shaders", "Simple.vcg")));
-	//Tools.copyFile(getClass().getResourceAsStream("/com/ktxsoftware/pss/Texture.fcg"), directory.resolve(Paths.get("build", "shaders", "Texture.fcg")));
-	//Tools.copyFile(getClass().getResourceAsStream("/com/ktxsoftware/pss/Texture.vcg"), directory.resolve(Paths.get("build", "shaders", "Texture.vcg")));
+	std::ofstream simple_fcg(directory.resolve(Paths::get("build", "shaders", "Simple.fcg")).toString());
+	simple_fcg
+		<< "void main(float4 out Color : COLOR, uniform float4 MaterialColor) {\n"
+		<< "\tColor = MaterialColor;\n"
+		<< "}\n";
+
+	std::ofstream simple_vcg(directory.resolve(Paths::get("build", "shaders", "Simple.vcg")).toString());
+	simple_vcg
+		<< "void main(float4 in a_Position : POSITION, float4 out v_Position : POSITION, uniform float4x4 WorldViewProj) {\n"
+		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
+		<< "}\n";
+
+	std::ofstream texture_fcg(directory.resolve(Paths::get("build", "shaders", "Texture.fcg")).toString());
+	texture_fcg
+		<< "void main(float2 in  v_TexCoord : TEXCOORD0, float4 out Color : COLOR, uniform sampler2D Texture0 : TEXUNIT0) {\n"
+		<< "\tColor = tex2D(Texture0, v_TexCoord);\n"
+		<< "}\n";
+
+	std::ofstream texture_vcg(directory.resolve(Paths::get("build", "shaders", "Texture.vcg")).toString());
+	texture_vcg
+		<< "void main(float4 in a_Position : POSITION, float2 in a_TexCoord : TEXCOORD0, float4 out v_Position : POSITION, float2 out v_TexCoord : TEXCOORD0, uniform float4x4 WorldViewProj) {\n"
+		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
+		<< "\tv_TexCoord  = a_TexCoord;\n"
+		<< "}\n";
 }
 
 void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {

@@ -1,4 +1,5 @@
 #include "XnaExporter.h"
+#include "Ball.h"
 #include "ImageTool.h"
 #include "String.h"
 
@@ -10,7 +11,25 @@ XnaExporter::XnaExporter(Path directory) : CSharpExporter(directory) {
 }
 
 void XnaExporter::exportResources() {
-	//Tools.copyFile(getClass().getResourceAsStream("/com/ktxsoftware/xna/AssemblyInfo.cs"), directory.resolve(Paths.get("build", "Properties", "AssemblyInfo.cs")));
+	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString());
+	assemblyInfo
+		<< "using System.Reflection;\n"
+		<< "using System.Runtime.CompilerServices;\n"
+		<< "using System.Runtime.InteropServices;\n"
+		<< "\n"
+		<< "[assembly: AssemblyTitle(\"WindowsGame1\")]\n"
+		<< "[assembly: AssemblyProduct(\"WindowsGame1\")]\n"
+		<< "[assembly: AssemblyDescription(\"\")]\n"
+		<< "[assembly: AssemblyCompany(\"KTX Software Development\")]\n"
+		<< "[assembly: AssemblyCopyright(\"Copyright © KTX Software Development 2013\")]\n"
+		<< "[assembly: AssemblyTrademark(\"\")]\n"
+		<< "[assembly: AssemblyCulture(\"\")]\n"
+		<< "\n"
+		<< "[assembly: ComVisible(false)]\n"
+		<< "\n"
+		<< "[assembly: Guid(\"9bc720e6-1f41-4daa-9629-0bc91d061f28\")]\n"
+		<< "\n"
+		<< "[assembly: AssemblyVersion(\"1.0.0.0\")]\n";
 }
 
 std::string XnaExporter::backendDir() {
@@ -99,8 +118,8 @@ void XnaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& 
 }
 
 void XnaExporter::exportCsProj(UUID projectUuid) {
-	//Ball.the().exportTo(directory.resolve(Paths::get("build", "GameThumbnail.png")), 64, 64, null, directory);
-	//Ball.the().exportToWindowsIcon(directory.resolve(Paths::get("build", "Game.ico")), directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("build", "GameThumbnail.png")), 64, 64, Color::transparent, directory);
+	Ball::the()->exportToWindowsIcon(directory.resolve(Paths::get("build", "Game.ico")), directory);
 		
 	writeFile(directory.resolve(Paths::get("build", "Project.csproj")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
