@@ -288,6 +288,96 @@ namespace {
 			out << "solution:addProject(project)\n";
 
 			//exportKoreProject(directory);
+#ifdef SYS_WINDOWS
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake.exe"));
+#elif defined SYS_OSX
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake-osx"));
+#elif defined SYS_LINUX
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake-linux"));
+#endif
+			std::string platformString = "unknown";
+			switch (platform) {
+			case Windows:
+				platformString = "windows";
+				break;
+			case Linux:
+				platformString = "linux";
+				break;
+			case Xbox360:
+				platformString = "xbox360";
+				break;
+			case PlayStation3:
+				platformString = "ps3";
+				break;
+			case Android:
+				platformString = "android";
+				break;
+			case WindowsRT:
+				platformString = "windowsrt";
+				break;
+			case OSX:
+				platformString = "osx";
+				break;
+			case iOS:
+				platformString = "ios";
+				break;
+			case HTML5:
+				platformString = "html5";
+				break;
+			case Flash:
+				platformString = "flash";
+				break;
+			case WPF:
+				platformString = "wpf";
+				break;
+			case XNA:
+				platformString = "xna";
+				break;
+			case Java:
+				platformString = "java";
+				break;
+			case PlayStationMobile:
+				platformString = "psm";
+				break;
+			case Dalvik:
+				platformString = "dalvik";
+				break;
+			}
+
+			std::string gfx = "unknown";
+			switch (Options::getGraphicsApi()) {
+			case OpenGL:
+				gfx = "opengl";
+				break;
+			case OpenGL2:
+				gfx = "opengl2";
+				break;
+			case Direct3D9:
+				gfx = "direct3d9";
+				break;
+			case Direct3D11:
+				gfx = "direct3d11";
+				break;
+			}
+
+			std::string vs = "unknown";
+			switch (Options::getVisualStudioVersion()) {
+			case VS2010:
+				vs = "vs2010";
+				break;
+			case VS2012:
+				vs = "vs2012";
+				break;
+			}
+		
+			executeSync(kake.toString()
+				+ " " + platformString
+				//+ " pch=" + Options::getPrecompiledHeaders()
+				+ " intermediate=" + Options::getIntermediateDrive()
+				+ " gfx=" + gfx
+				+ " vs=" + vs
+				+ " " + directory.toString()
+			);
 		}
 		
 		std::cout << "Done." << std::endl;
