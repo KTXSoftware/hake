@@ -1,21 +1,71 @@
 #include "ImageTool.h"
+#include "Files.h"
 #include "KhaExporter.h"
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 using namespace kake;
 
+namespace {
+	typedef unsigned char u8;
+	typedef unsigned int u32;
+
+	int round(float value) {
+		return (int)std::floor(value + 0.5f);
+	}
+
+	u32 sample(u32* image, int w, int h, float x, float y) {
+		float posx = x * w;
+		float posy = y * h;
+		int xx = round(posx);
+		int yy = round(posy);
+		xx = std::min(std::max(0, xx), w - 1);
+		yy = std::min(std::max(0, yy), h - 1);
+		return image[yy * w + xx];
+	}
+
+	u32* scale(u32* image, int sw, int sh, int dw, int dh) {
+		u32* data = new u32[dw * dh];
+		for (int y = 0; y < dh; ++y) {
+			for (int x = 0; x < dw; ++x) {
+				data[y * dw + x] = sample(image, sw, sh, (float)x / (float)dw, (float)y / (float)dh);
+			}
+		}
+		return data;
+	}
+
+	u8* removeColor(u8* image, int w, int h, int red, int green, int blue) {
+		for (int y = 0; y < h; ++y) {
+			for (int x = 0; x < w; ++x) {
+				if (
+					image[y * w * 4 + x * 4 + 0] == red
+					&& image[y * w * 4 + x * 4 + 1] == green
+					&& image[y * w * 4 + x * 4 + 2] == blue
+				) {
+						image[y * w * 4 + x * 4 + 3] = 0;
+				}
+			}
+		}
+		return nullptr;
+	}
+}
+
 void hake::exportImage(Path from, Path to, Json::Value& asset) {
-	//if (!to.toFile().getParentFile().exists()) to.toFile().getParentFile().mkdirs();
+	if (!Files::exists(to.parent())) Files::createDirectories(to.parent());
 	if ((!asset.has("scale") || asset["scale"].number() == 1 || asset["scale"].number() == 0) && !asset.has("background")) KhaExporter::copyFile(from, to);
 	else {
-		//try {
-		//	Image image = ImageIO.read(from.toFile());
-		//	if (image == null) {
-		//		throw new IOException("Could not read image " + from + ".");
-		//	}
-		//	if (asset.scale != 0) {
-		//		image = image.getScaledInstance((int)(image.getWidth(null) * asset.scale), (int)(image.getHeight(null) * asset.scale), BufferedImage.SCALE_FAST);
-		//	}
-		//		
+		int w;
+		int h;
+		int comp;
+		u8* image = stbi_load(from.toString().c_str(), &w, &h, &comp, 4);
+		if (image == nullptr) throw std::runtime_error("Could not read image.");
+		if (asset.has("scale") && asset["scale"].number() != 0 && asset["scale"].number() != 1) {
+			image = (u8*)scale((u32*)image, w, h, w * asset["scale"].number(), h * asset["scale"].number());
+			w *= asset["scale"].number();
+			h *= asset["scale"].number();
+		}
+
 		//	BufferedImage outImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_4BYTE_ABGR);
 		//	Graphics2D g2d = (Graphics2D)outImage.getGraphics();
 		//	if (asset.circle) {
@@ -29,23 +79,14 @@ void hake::exportImage(Path from, Path to, Json::Value& asset) {
 		//	}
 		//	g2d.drawImage(image, 0, 0, null);
 		//	g2d.dispose();
-		//		
-		//	if (asset.background != null) {
-		//		Color c = new Color(asset.background.red, asset.background.green, asset.background.blue);
-		//		for (int y = 0; y < image.getHeight(null); ++y) {
-		//			for (int x = 0; x < image.getWidth(null); ++x) {
-		//				Color c2 = new Color(outImage.getRGB(x, y));
-		//				if (c.getRed() == c2.getRed() && c.getGreen() == c2.getGreen() && c.getBlue() == c2.getBlue()) {
-		//					outImage.setRGB(x, y, 0);
-		//				}
-		//			}
-		//		}
-		//	}
-		//		
-		//	ImageIO.write(outImage, "png", to.toFile());
-		//}
-		//catch (Exception ex) {
-		//	Log.the().log(ex);
-		//}
+		
+		if (asset.has("background")) {
+			int red = asset["background"]["red"].number();
+			int green = asset["background"]["green"].number();
+			int blue = asset["background"]["blue"].number();
+			image = removeColor(image, w, h, red, green, blue);
+		}
+
+		stbi_write_png(to.toString().c_str(), w, h, 4, image, 0);
 	}
 }
