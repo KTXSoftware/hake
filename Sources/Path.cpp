@@ -120,7 +120,8 @@ Path Path::toAbsolutePath() {
 	if (path[1] == ':') return *this;
 	char buffer[1001];
 	GetCurrentDirectoryA(1000, buffer);
-	return Paths::get(replace(buffer, '\\', '/'), path);
+	if (this->path == ".") return Paths::get(buffer);
+	else return Paths::get(replace(buffer, '\\', '/'), path);
 #endif
 #ifdef SYS_LINUX
 	char buffer[1001];

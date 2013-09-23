@@ -234,7 +234,7 @@ namespace {
 		}
 		exporter->exportSolution(platform, haxeDirectory);
 		
-		std::string name = directory.getFileName();
+		std::string name = directory.toAbsolutePath().getFileName();
 		
 		if (kore && Files::exists(directory.resolve("Kore"))) {
 			executeHaxe(haxeDirectory, directory, "Kore", "cpp", " -D no-compilation");
@@ -273,7 +273,7 @@ namespace {
 					<< "\"**/src/__main__.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/NekoAPI.cpp\")\n";
 				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"build/Sources/include\", "
-					<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/hxcpp/runtime/libs/nekoapi\");\n";
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/kxcpp/runtime/libs/nekoapi\");\n";
 				out << "project:setDebugDir(\"build/bin\")\n";
 				if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
