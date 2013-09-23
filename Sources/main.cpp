@@ -127,7 +127,8 @@ namespace {
 			name = name.substr(0, lastIndexOf(name, '.'));
 			switch (platform) {
 			case Flash: {
-				compileShader(kfx, "agal", shader, directory.resolve(Paths::get("build", "bin", name + ".agal")), directory.resolve(Paths::get("build", "temp")));
+				if (Files::exists(shaderPath.resolve(name + ".agal"))) Files::copy(shaderPath.resolve(name + ".agal"), directory.resolve(Paths::get("build", "bin", name + ".agal")), true);
+				else compileShader(kfx, "agal", shader, directory.resolve(Paths::get("build", "bin", name + ".agal")), directory.resolve(Paths::get("build", "temp")));
 				addShader(project, name, ".agal");
 				break;
 			}
@@ -238,62 +239,64 @@ namespace {
 		if (kore && Files::exists(directory.resolve("Kore"))) {
 			executeHaxe(haxeDirectory, directory, "Kore", "cpp", " -D no-compilation");
 			
-			std::ofstream out(directory.resolve("kake.lua").toString());
-			out << "solution = Solution.new(\"" << name << "\")\n";
-			out << "project = Project.new(\"" << name << "\")\n";
-			std::vector<std::string> files;
-			files.push_back("Kha/Backends/hxcpp/src/**.h");
-			files.push_back("Kha/Backends/hxcpp/src/**.cpp");
-			files.push_back("Kha/Backends/hxcpp/include/**.h");
-			//"Kha/Backends/hxcpp/runtime/libs/nekoapi/**.cpp"
-			files.push_back("Kha/Backends/hxcpp/runtime/libs/regexp/**.cpp");
-			files.push_back("Kha/Backends/hxcpp/runtime/libs/std/**.cpp");
-			//"Kha/Backends/hxcpp/runtime/libs/zlib/**.cpp"
-			files.push_back("Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/**.h");
-			files.push_back("Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/**.cpp");
-			//"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/**.cc"
-			files.push_back("Kha/Backends/Kore/*.cpp");
-			files.push_back("Kha/Backends/Kore/*.h");
-			files.push_back("build/Sources/**.h");
-			files.push_back("build/Sources/**.cpp");
-			out << "project:addFiles(\n";
-			out << "\"" + files[0] + "\"";
-			for (unsigned i = 1; i < files.size(); ++i) {
-				out << ", \"" + files[i] + "\"";
+			{
+				std::ofstream out(directory.resolve("kake.lua").toString());
+				out << "solution = Solution.new(\"" << name << "\")\n";
+				out << "project = Project.new(\"" << name << "\")\n";
+				std::vector<std::string> files;
+				files.push_back("Kha/Backends/kxcpp/src/**.h");
+				files.push_back("Kha/Backends/kxcpp/src/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/include/**.h");
+				//"Kha/Backends/kxcpp/runtime/libs/nekoapi/**.cpp"
+				files.push_back("Kha/Backends/kxcpp/runtime/libs/regexp/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/runtime/libs/std/**.cpp");
+				//"Kha/Backends/kxcpp/runtime/libs/zlib/**.cpp"
+				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.h");
+				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cpp");
+				//"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cc"
+				files.push_back("Kha/Backends/Kore/*.cpp");
+				files.push_back("Kha/Backends/Kore/*.h");
+				files.push_back("build/Sources/**.h");
+				files.push_back("build/Sources/**.cpp");
+				out << "project:addFiles(\n";
+				out << "\"" + files[0] + "\"";
+				for (unsigned i = 1; i < files.size(); ++i) {
+					out << ", \"" + files[i] + "\"";
+				}
+				out << ")\n";
+				out << "project:addExcludes(\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/dftables.cpp\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcredemo.cpp\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcregrep.cpp\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcretest.cpp\", "
+					<< "\"Kha/Backends/kxcpp/src/ExampleMain.cpp\", "
+					<< "\"Kha/Backends/kxcpp/src/hx/Scriptable.cpp\", "
+					<< "\"**/src/__main__.cpp\", "
+					<< "\"Kha/Backends/kxcpp/src/hx/NekoAPI.cpp\")\n";
+				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"build/Sources/include\", "
+					<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/hxcpp/runtime/libs/nekoapi\");\n";
+				out << "project:setDebugDir(\"build/bin\")\n";
+				if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
+				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
+				if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
+				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
+				out << "project:addDefine(\"STATIC_LINK\")\n";
+				out << "project:addDefine(\"PCRE_STATIC\")\n";
+				out << "project:addDefine(\"HXCPP_SET_PROP\")\n";
+				out << "project:addDefine(\"HXCPP_VISIT_ALLOCS\")\n";
+				out << "project:addDefine(\"KORE\")\n";
+				out << "project:addDefine(\"ROTATE90\")\n";
+				if (platform == Windows) out << "project:addLib(\"ws2_32\")\n";
+				out << "project:addSubProject(Solution.createProject(\"Kore\"))\n";
+				out << "solution:addProject(project)\n";
 			}
-			out << ")\n";
-			out << "project:addExcludes(\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/dftables.cpp\", "
-				<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/pcredemo.cpp\", "
-				<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/pcregrep.cpp\", "
-				<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8/pcretest.cpp\", "
-				<< "\"Kha/Backends/hxcpp/src/ExampleMain.cpp\", "
-				<< "\"Kha/Backends/hxcpp/src/hx/Scriptable.cpp\", "
-				<< "\"**/src/__main__.cpp\", "
-				<< "\"Kha/Backends/hxcpp/src/hx/NekoAPI.cpp\")\n";
-			out << "project:addIncludeDirs(\"Kha/Backends/hxcpp/include\", \"build/Sources/include\", "
-				<< "\"Kha/Backends/hxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/hxcpp/runtime/libs/nekoapi\");\n";
-			out << "project:setDebugDir(\"build/bin\")\n";
-			if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
-			if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
-			if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
-			if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
-			out << "project:addDefine(\"STATIC_LINK\")\n";
-			out << "project:addDefine(\"PCRE_STATIC\")\n";
-			out << "project:addDefine(\"HXCPP_SET_PROP\")\n";
-			out << "project:addDefine(\"HXCPP_VISIT_ALLOCS\")\n";
-			out << "project:addDefine(\"KORE\")\n";
-			out << "project:addDefine(\"ROTATE90\")\n";
-			if (platform == Windows) out << "project:addLib(\"ws2_32\")\n";
-			out << "project:addSubProject(Solution.createProject(\"Kore\"))\n";
-			out << "solution:addProject(project)\n";
 
 			//exportKoreProject(directory);
 #ifdef SYS_WINDOWS
-			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake.exe"));
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake", "kake.exe"));
 #elif defined SYS_OSX
-			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake-osx"));
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake", "kake-osx"));
 #elif defined SYS_LINUX
-			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake-linux"));
+			Path kake = directory.resolve(Paths::get("Kore", "Tools", "kake", "kake-linux"));
 #endif
 			std::string platformString = "unknown";
 			switch (platform) {
@@ -369,15 +372,16 @@ namespace {
 				vs = "vs2012";
 				break;
 			}
-		
-			executeSync(kake.toString()
-				+ " " + platformString
+
+			std::string exe;
+			exe = kake.toString()
+				+ " " + platformString;
 				//+ " pch=" + Options::getPrecompiledHeaders()
-				+ " intermediate=" + Options::getIntermediateDrive()
-				+ " gfx=" + gfx
-				+ " vs=" + vs
-				+ " " + directory.toString()
-			);
+			if (Options::getIntermediateDrive() != "") exe += " intermediate=" + Options::getIntermediateDrive();
+			exe += " gfx=" + gfx + " vs=" + vs;
+			if (directory.toString() != ".") exe += " " + directory.toString();
+		
+			executeSync(exe);
 		}
 		
 		std::cout << "Done." << std::endl;
