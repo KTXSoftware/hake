@@ -1,4 +1,5 @@
 #include "WpfExporter.h"
+#include "Files.h"
 #include "SoundTool.h"
 #include "String.h"
 
@@ -10,6 +11,8 @@ WpfExporter::WpfExporter(Path directory) : CSharpExporter(directory) {
 }
 
 void WpfExporter::exportResources() {
+	Files::createDirectories(directory.resolve(Paths::get("build", "Properties")));
+
 	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString());
 	assemblyInfo
 		<< "using System.Reflection;\n"

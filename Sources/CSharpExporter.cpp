@@ -17,7 +17,7 @@ void CSharpExporter::includeFiles(Path dir, Path baseDir) {
 	for (Path file : files) {
 		if (Files::isDirectory(file)) includeFiles(file, baseDir);
 		else if (endsWith(file.getFileName(), ".cs")) {
-			p(std::string("<Compile Include=\"") + baseDir.relativize(file).toString() + "\" />", 2);
+			p(std::string("<Compile Include=\"") + replace(baseDir.relativize(file).toString(), '/', '\\') + "\" />", 2);
 		}
 	}
 }
