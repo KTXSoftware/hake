@@ -30,7 +30,7 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory) {
 		h << "<movie height=\"" << height << "\" />";
 		p(h.str(), 2);
 		p("<movie version=\"11\" />", 2);
-		p("<movie minorVersion=\"0\" />", 2);
+		p("<movie minorVersion=\"2\" />", 2);
 		p("<movie platform=\"Flash Player\" />", 2);
 		p("<movie background=\"#FFFFFF\" />", 2);
 		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"" + haxeDirectory.toString() + "\" />", 2);
