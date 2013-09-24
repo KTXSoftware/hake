@@ -120,6 +120,7 @@ namespace {
 	void addShaders(Platform platform, Json::Data& project, Path directory, Path shaderPath, std::string kfx) {
 		if (!Files::isDirectory(shaderPath)) return;
 		Files::createDirectories(directory.resolve(Paths::get("build", "bin")));
+		Files::createDirectories(directory.resolve(Paths::get("build", "temp")));
 		auto shaders = Files::newDirectoryStream(shaderPath);
 		for (Path shader : shaders) {
 			std::string name = shader.getFileName();
