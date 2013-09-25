@@ -58,25 +58,25 @@ void PlayStationMobileExporter::copyBlob(Platform platform, Path from, Path to) 
 }
 
 void PlayStationMobileExporter::exportResources() {
-	std::ofstream simple_fcg(directory.resolve(Paths::get("build", "shaders", "Simple.fcg")).toString());
+	std::ofstream simple_fcg(directory.resolve(Paths::get("build", "shaders", "Simple.fcg")).toString().c_str());
 	simple_fcg
 		<< "void main(float4 out Color : COLOR, uniform float4 MaterialColor) {\n"
 		<< "\tColor = MaterialColor;\n"
 		<< "}\n";
 
-	std::ofstream simple_vcg(directory.resolve(Paths::get("build", "shaders", "Simple.vcg")).toString());
+	std::ofstream simple_vcg(directory.resolve(Paths::get("build", "shaders", "Simple.vcg")).toString().c_str());
 	simple_vcg
 		<< "void main(float4 in a_Position : POSITION, float4 out v_Position : POSITION, uniform float4x4 WorldViewProj) {\n"
 		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
 		<< "}\n";
 
-	std::ofstream texture_fcg(directory.resolve(Paths::get("build", "shaders", "Texture.fcg")).toString());
+	std::ofstream texture_fcg(directory.resolve(Paths::get("build", "shaders", "Texture.fcg")).toString().c_str());
 	texture_fcg
 		<< "void main(float2 in  v_TexCoord : TEXCOORD0, float4 out Color : COLOR, uniform sampler2D Texture0 : TEXUNIT0) {\n"
 		<< "\tColor = tex2D(Texture0, v_TexCoord);\n"
 		<< "}\n";
 
-	std::ofstream texture_vcg(directory.resolve(Paths::get("build", "shaders", "Texture.vcg")).toString());
+	std::ofstream texture_vcg(directory.resolve(Paths::get("build", "shaders", "Texture.vcg")).toString().c_str());
 	texture_vcg
 		<< "void main(float4 in a_Position : POSITION, float2 in a_TexCoord : TEXCOORD0, float4 out v_Position : POSITION, float2 out v_TexCoord : TEXCOORD0, uniform float4x4 WorldViewProj) {\n"
 		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"

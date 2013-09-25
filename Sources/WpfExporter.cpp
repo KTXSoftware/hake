@@ -13,7 +13,7 @@ WpfExporter::WpfExporter(Path directory) : CSharpExporter(directory) {
 void WpfExporter::exportResources() {
 	Files::createDirectories(directory.resolve(Paths::get("build", "Properties")));
 
-	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString());
+	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString().c_str());
 	assemblyInfo
 		<< "using System.Reflection;\n"
 		<< "using System.Resources;\n"
@@ -26,7 +26,7 @@ void WpfExporter::exportResources() {
 		<< "[assembly: AssemblyConfiguration(\"\")]\n"
 		<< "[assembly: AssemblyCompany(\"KTX Software Development\")]\n"
 		<< "[assembly: AssemblyProduct(\"HaxeProject\")]\n"
-		<< "[assembly: AssemblyCopyright(\"Copyright © KTX Software Development 2013\")]\n"
+		<< "[assembly: AssemblyCopyright(\"Copyright ï¿½ KTX Software Development 2013\")]\n"
 		<< "[assembly: AssemblyTrademark(\"\")]\n"
 		<< "[assembly: AssemblyCulture(\"\")]\n"
 		<< "\n"
@@ -40,7 +40,7 @@ void WpfExporter::exportResources() {
 		<< "[assembly: AssemblyVersion(\"1.0.0.0\")]\n"
 		<< "[assembly: AssemblyFileVersion(\"1.0.0.0\")]\n";
 
-	std::ofstream resourcesDesigner(directory.resolve(Paths::get("build", "Properties", "Resources.Designer.cs")).toString());
+	std::ofstream resourcesDesigner(directory.resolve(Paths::get("build", "Properties", "Resources.Designer.cs")).toString().c_str());
 	resourcesDesigner
 		<< "namespace WpfApplication1.Properties {\n"
 		<< "\t[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"System.Resources.Tools.StronglyTypedResourceBuilder\", \"4.0.0.0\")]\n"
@@ -83,7 +83,7 @@ void WpfExporter::exportResources() {
 		<< "\t}\n"
 		<< "}\n";
 
-	std::ofstream resources(directory.resolve(Paths::get("build", "Properties", "Resources.resx")).toString());
+	std::ofstream resources(directory.resolve(Paths::get("build", "Properties", "Resources.resx")).toString().c_str());
 	resources
 		<< "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 		<< "<root>\n"
@@ -144,7 +144,7 @@ void WpfExporter::exportResources() {
 		<< "</resheader>\n"
 		<< "</root>\n";
 
-	std::ofstream settingsDesigner(directory.resolve(Paths::get("build", "Properties", "Settings.Designer.cs")).toString());
+	std::ofstream settingsDesigner(directory.resolve(Paths::get("build", "Properties", "Settings.Designer.cs")).toString().c_str());
 	settingsDesigner
 		<< "namespace WpfApplication1.Properties\n"
 		<< "{\n"
@@ -164,7 +164,7 @@ void WpfExporter::exportResources() {
 		<< "\t}\n"
 		<< "}\n";
 	
-	std::ofstream settings(directory.resolve(Paths::get("build", "Properties", "Settings.settings")).toString());
+	std::ofstream settings(directory.resolve(Paths::get("build", "Properties", "Settings.settings")).toString().c_str());
 	settings
 		<< "<?xml version='1.0' encoding='utf-8'?>\n"
 		<< "<SettingsFile xmlns=\"uri:settings\" CurrentProfile=\"(Default)\">\n"

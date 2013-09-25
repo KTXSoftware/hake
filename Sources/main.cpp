@@ -241,7 +241,7 @@ namespace {
 			executeHaxe(haxeDirectory, directory, "Kore", "cpp", " -D no-compilation");
 			
 			{
-				std::ofstream out(directory.resolve("kake.lua").toString());
+				std::ofstream out(directory.resolve("kake.lua").toString().c_str());
 				out << "solution = Solution.new(\"" << name << "\")\n";
 				out << "project = Project.new(\"" << name << "\")\n";
 				std::vector<std::string> files;

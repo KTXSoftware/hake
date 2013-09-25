@@ -32,7 +32,7 @@ namespace kake {
 		}
 
 		void save(Path path) {
-			std::ofstream f(path.toString(), std::ios::binary);
+			std::ofstream f(path.toString().c_str(), std::ios::binary);
 			for (size_t i = 0; i < bytes.size(); ++i) f.put(bytes[i]);
 		}
 	

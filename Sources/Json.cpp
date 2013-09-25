@@ -379,7 +379,7 @@ void Json::Array::serialize(std::ofstream& stream, int indent, bool newline) {
 }
 
 void Data::save(kake::Path path) {
-	std::ofstream file(path.toString());
+	std::ofstream file(path.toString().c_str());
 	myValue->serialize(file, 0, false);
 	file << "\n";
 }

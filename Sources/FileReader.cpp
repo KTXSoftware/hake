@@ -85,11 +85,12 @@ bool FileReader::open(const char* filename) {
 	strcat(filepath, filename);
 #endif
 #ifdef SYS_OSX
-	strcpy(filepath, macgetresourcepath());
+	/*strcpy(filepath, macgetresourcepath());
 	strcat(filepath, "/");
 	strcat(filepath, KORE_DEBUGDIR);
 	strcat(filepath, "/");
-	strcat(filepath, filename);
+	strcat(filepath, filename);*/
+	strcpy(filepath, filename);
 #endif
 #ifdef SYS_XBOX360
 	filepath = Kt::Text(L"game:\\media\\") + filepath;

@@ -11,7 +11,7 @@ XnaExporter::XnaExporter(Path directory) : CSharpExporter(directory) {
 }
 
 void XnaExporter::exportResources() {
-	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString());
+	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString().c_str());
 	assemblyInfo
 		<< "using System.Reflection;\n"
 		<< "using System.Runtime.CompilerServices;\n"
@@ -21,7 +21,7 @@ void XnaExporter::exportResources() {
 		<< "[assembly: AssemblyProduct(\"WindowsGame1\")]\n"
 		<< "[assembly: AssemblyDescription(\"\")]\n"
 		<< "[assembly: AssemblyCompany(\"KTX Software Development\")]\n"
-		<< "[assembly: AssemblyCopyright(\"Copyright © KTX Software Development 2013\")]\n"
+		<< "[assembly: AssemblyCopyright(\"Copyright ï¿½ KTX Software Development 2013\")]\n"
 		<< "[assembly: AssemblyTrademark(\"\")]\n"
 		<< "[assembly: AssemblyCulture(\"\")]\n"
 		<< "\n"
