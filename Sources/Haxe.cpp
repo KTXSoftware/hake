@@ -11,5 +11,10 @@ void hake::executeHaxe(Path haxeDirectory, Path directory, std::string backendDi
 #elif defined SYS_LINUX
 	Path exe = haxeDirectory.resolve("haxe-linux");
 #endif
-	executeSync(exe.toString() + " -cp " + directory.resolve("Sources").toString() + " -cp " + directory.resolve(Paths::get("Kha", "Sources")).toString() + " -cp " + directory.resolve(Paths::get("Kha", "Backends", backendDir)).toString() + " -" + language + " " + directory.resolve(Paths::get("build", "Sources")).toString() + " -main Main" + options);		
+	executeSync(exe.toString()
+		+ " -cp " + directory.resolve("Sources").toString()
+		+ " -cp " + directory.resolve(Paths::get("Kha", "Sources")).toString()
+		+ " -cp " + directory.resolve(Paths::get("Kha", "Backends", backendDir)).toString()
+		+ " -" + language + " " + directory.resolve(Paths::get("build", "Sources")).toString() + " -main Main" + options,
+		std::string("HAXE_STD_PATH=") + haxeDirectory.resolve("std").toString());
 }
