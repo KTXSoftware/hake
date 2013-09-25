@@ -19,6 +19,7 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 	char* environment = new char[2000];
 	for (int i = 0; i < 2000; ++i) environment[i] = 0;
 	strcpy(environment, env.c_str());
+	for (auto arg : arguments) command += " " + arg;
 	CreateProcessA(nullptr, (char*)command.c_str(), nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, environment, nullptr, &startupInfo, &processInfo);
 	WaitForSingleObject(processInfo.hProcess, INFINITE);
 	CloseHandle(processInfo.hProcess);
@@ -28,20 +29,20 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 	pid_t processId;
 	int stat;
 	struct sigaction sa, savintr, savequit;
-    sigset_t saveblock;
-    sa.sa_handler = SIG_IGN;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    sigemptyset(&savintr.sa_mask);
-    sigemptyset(&savequit.sa_mask);
-    sigaction(SIGINT, &sa, &savintr);
-    sigaction(SIGQUIT, &sa, &savequit);
-    sigaddset(&sa.sa_mask, SIGCHLD);
-    sigprocmask(SIG_BLOCK, &sa.sa_mask, &saveblock);
+	sigset_t saveblock;
+	sa.sa_handler = SIG_IGN;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigemptyset(&savintr.sa_mask);
+	sigemptyset(&savequit.sa_mask);
+	sigaction(SIGINT, &sa, &savintr);
+	sigaction(SIGQUIT, &sa, &savequit);
+	sigaddset(&sa.sa_mask, SIGCHLD);
+	sigprocmask(SIG_BLOCK, &sa.sa_mask, &saveblock);
 	if ((processId = fork()) == 0) {
 		sigaction(SIGINT, &savintr, (struct sigaction *)0);
-        sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
-        sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
+		sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
+		sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
 		
 		char* cmd = new char[2000];
 		strcpy(cmd, command.c_str());
@@ -64,19 +65,19 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 		_exit(127);
 	}
 	if (processId == -1) {
-        stat = -1; /* errno comes from fork() */
-    }
+		stat = -1; /* errno comes from fork() */
+	}
 	else {
-        while (waitpid(processId, &stat, 0) == -1) {
-            if (errno != EINTR) {
-                stat = -1;
-                break;
-            }
-        }
-    }
+		while (waitpid(processId, &stat, 0) == -1) {
+			if (errno != EINTR) {
+				stat = -1;
+				break;
+			}
+		}
+	}
 	sigaction(SIGINT, &savintr, (struct sigaction *)0);
-    sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
-    sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
+	sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
+	sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
 	return; //stat
 #endif
 }
