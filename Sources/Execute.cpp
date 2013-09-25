@@ -27,7 +27,22 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 	//system(command.c_str());
 	pid_t processId;
 	int stat;
+	struct sigaction sa, savintr, savequit;
+    sigset_t saveblock;
+    sa.sa_handler = SIG_IGN;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigemptyset(&savintr.sa_mask);
+    sigemptyset(&savequit.sa_mask);
+    sigaction(SIGINT, &sa, &savintr);
+    sigaction(SIGQUIT, &sa, &savequit);
+    sigaddset(&sa.sa_mask, SIGCHLD);
+    sigprocmask(SIG_BLOCK, &sa.sa_mask, &saveblock);
 	if ((processId = fork()) == 0) {
+		sigaction(SIGINT, &savintr, (struct sigaction *)0);
+        sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
+        sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
+		
 		char* cmd = new char[2000];
 		strcpy(cmd, command.c_str());
 		
@@ -59,6 +74,9 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
             }
         }
     }
+	sigaction(SIGINT, &savintr, (struct sigaction *)0);
+    sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
+    sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
 	return; //stat
 #endif
 }

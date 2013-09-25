@@ -292,6 +292,7 @@ namespace {
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
 				if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
+				out << "project:addDefine(\"KORE_DEBUGDIR=\\\"bin\\\"\")\n";
 				out << "project:addDefine(\"STATIC_LINK\")\n";
 				out << "project:addDefine(\"PCRE_STATIC\")\n";
 				out << "project:addDefine(\"HXCPP_SET_PROP\")\n";
