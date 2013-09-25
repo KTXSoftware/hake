@@ -72,7 +72,12 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 	closeFile();
 		
 	Path p = directory.resolve("build").relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
-	executeHaxe(haxeDirectory, directory, backend(), "java", " -D no-compilation -java-lib " + p.toString());
+	std::vector<std::string> options;
+	options.push_back("-D");
+	options.push_back("no-compilation");
+	options.push_back("-java-lib");
+	options.push_back(p.toString());
+	executeHaxe(haxeDirectory, directory, backend(), "java", options);
 		
 	exportEclipseProject();
 }

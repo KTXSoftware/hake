@@ -82,8 +82,13 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
-		
-	executeHaxe(haxeDirectory, directory, backendDir(), "cs", " -D no-root -D no-compilation");
+	
+	std::vector<std::string> options;
+	options.push_back("-D");
+	options.push_back("no-root");
+	options.push_back("-D");
+	options.push_back("no-compilation");
+	executeHaxe(haxeDirectory, directory, backendDir(), "cs", options);
 		
 	UUID projectUuid = UUID::randomUUID();
 	exportSLN(projectUuid);

@@ -100,7 +100,12 @@ namespace {
 
 	void compileShader(std::string kfx, std::string type, Path from, Path to, Path temp) {
 		if (kfx.size() > 0) {
-			executeSync(kfx + " " + type + " " + from.toString() + " " + to.toString() + " " + temp.toString());
+			std::vector<std::string> options;
+			options.push_back(type);
+			options.push_back(from.toString());
+			options.push_back(to.toString());
+			options.push_back(temp.toString());
+			executeSync(kfx, options);
 		}
 	}
 
@@ -175,6 +180,10 @@ namespace {
 
 	std::string exportKhaProject(Path directory, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx) {
 		std::cout << "Generating Kha project." << std::endl;
+		
+		Files::createDirectories(directory.resolve(Paths::get("build", "bin")));
+		Files::createDirectories(directory.resolve(Paths::get("build", "temp")));
+		
 		KhaExporter* exporter = nullptr;
 		bool kore = false;
 		switch (platform) {
@@ -238,7 +247,10 @@ namespace {
 		std::string name = directory.toAbsolutePath().getFileName();
 		
 		if (kore && Files::exists(directory.resolve("Kore"))) {
-			executeHaxe(haxeDirectory, directory, "Kore", "cpp", " -D no-compilation");
+			std::vector<std::string> options;
+			options.push_back("-D");
+			options.push_back("no-compilation");
+			executeHaxe(haxeDirectory, directory, "Kore", "cpp", options);
 			
 			{
 				std::ofstream out(directory.resolve("kake.lua").toString().c_str());
@@ -374,15 +386,17 @@ namespace {
 				break;
 			}
 
-			std::string exe;
-			exe = kake.toString()
-				+ " " + platformString;
+			{
+				std::string exe = kake.toString();
+				std::vector<std::string> options;
+				options.push_back(platformString);
 				//+ " pch=" + Options::getPrecompiledHeaders()
-			if (Options::getIntermediateDrive() != "") exe += " intermediate=" + Options::getIntermediateDrive();
-			exe += " gfx=" + gfx + " vs=" + vs;
-			if (directory.toString() != ".") exe += " " + directory.toString();
-		
-			executeSync(exe);
+				if (Options::getIntermediateDrive() != "") options.push_back("intermediate=" + Options::getIntermediateDrive());
+				options.push_back("gfx=" + gfx);
+				options.push_back("vs=" + vs);
+				if (directory.toString() != ".") options.push_back(directory.toString());
+				executeSync(exe, options);
+			}
 		}
 		
 		std::cout << "Done." << std::endl;
@@ -450,7 +464,7 @@ int main(int argc, char** argv) {
 		else if (startsWith(arg, "mp3=")) mp3Encoder = arg.substr(4);
 		else if (startsWith(arg, "kfx=")) kfx = arg.substr(4);
 
-		else path = arg;
+		//else path = arg;
 	}
 	exportProject(Paths::get(path), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx);
 }

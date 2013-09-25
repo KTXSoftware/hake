@@ -48,6 +48,7 @@ void Files::createDirectories(Path path) {
 	char* p;
 	char file_path[1001];
 	std::strcpy(file_path, path.toString().c_str());
+	std::strcat(file_path, "/");
 	for (p = std::strchr(file_path + 1, '/'); p; p = strchr(p + 1, '/')) {
 		*p='\0';
 		if (mkdir(file_path, 0700) == -1) {
@@ -61,6 +62,7 @@ void Files::createDirectories(Path path) {
 	char* p;
 	char file_path[1001];
 	std::strcpy(file_path, path.path.c_str());
+	std::strcat(file_path, "/");
 	for (p = std::strchr(file_path + 1, '/'); p; p = strchr(p + 1, '/')) {
 		*p='\0';
 		if (mkdir(file_path, 0700) == -1) {
