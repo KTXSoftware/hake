@@ -6,6 +6,11 @@
 #else
 #include <errno.h>
 #include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #endif
 
 void hake::executeSync(std::string command, std::vector<std::string> arguments, std::string env) {
@@ -43,24 +48,24 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 		sigaction(SIGINT, &savintr, (struct sigaction *)0);
 		sigaction(SIGQUIT, &savequit, (struct sigaction *)0);
 		sigprocmask(SIG_SETMASK, &saveblock, (sigset_t *)0);
-		
+
 		char* cmd = new char[2000];
 		strcpy(cmd, command.c_str());
-		
+
 		char** argv = new char*[arguments.size() + 2];
 		argv[0] = new char[1000];
 		strcpy(argv[0], command.c_str());
-		for (int i = 0; i < arguments.size(); ++i) {
+		for (size_t i = 0; i < arguments.size(); ++i) {
 			argv[i + 1] = new char[1000]; //leak
 			strcpy(argv[i + 1], arguments[i].c_str());
 		}
 		argv[arguments.size() + 1] = 0;
-		
+
 		char* environment = new char[2000];
 		for (int i = 0; i < 2000; ++i) environment[i] = 0;
 		strcpy(environment, env.c_str());
 		char* const envarray[] = {environment, 0};
-		
+
 		execve(cmd, argv, envarray);
 		_exit(127);
 	}
