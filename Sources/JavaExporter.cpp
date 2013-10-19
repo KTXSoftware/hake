@@ -10,8 +10,14 @@ JavaExporter::JavaExporter(Path directory) : directory(directory) {
 	
 }
 
-void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory) {
-	writeFile(directory.resolve("Project.hxproj"));
+std::string JavaExporter::sysdir() {
+	return "java";
+}
+
+void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory, Path from) {
+	createDirectory(directory.resolve(sysdir()));
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -69,13 +75,13 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 	p("</project>");
 	closeFile();
 		
-	Path p = directory.resolve("java").relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
+	Path p = directory.resolve(sysdir()).relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
 	std::vector<std::string> options;
 	options.push_back("-D");
 	options.push_back("no-compilation");
 	options.push_back("-java-lib");
 	options.push_back(p.toString());
-	executeHaxe(haxeDirectory, directory, backend(), "java", options);
+	executeHaxe(haxeDirectory, from, directory.resolve(Paths::get(sysdir(), "Sources")), backend(), "java", options);
 		
 	exportEclipseProject();
 }
@@ -85,7 +91,7 @@ std::string JavaExporter::backend() {
 }
 
 void JavaExporter::exportEclipseProject() {
-	writeFile(directory.resolve(Paths::get("java", ".classpath")));
+	writeFile(directory.resolve(Paths::get(sysdir(), ".classpath")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<classpath>");
 	p("\t<classpathentry kind=\"src\" path=\"Sources/src\"/>");
@@ -94,7 +100,7 @@ void JavaExporter::exportEclipseProject() {
 	p("</classpath>");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("java", ".project")));
+	writeFile(directory.resolve(Paths::get(sysdir(), ".project")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<projectDescription>");
 	p("\t<name>" + getCurrentDirectoryName(directory) + "</name>");
@@ -116,17 +122,17 @@ void JavaExporter::exportEclipseProject() {
 }
 
 void JavaExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(from, directory.resolve("java").resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
 }
 
 void JavaExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(from, directory.resolve("java").resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
 }
 
 void JavaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(from, directory.resolve("java").resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void JavaExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(from, directory.resolve("java").resolve(to));
+	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }

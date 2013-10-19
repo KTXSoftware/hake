@@ -11,8 +11,14 @@ FlashExporter::FlashExporter(kake::Path directory) : directory(directory) {
 	
 }
 
-void FlashExporter::exportSolution(Platform platform, Path haxeDirectory) {
-	writeFile(directory.resolve("Project.hxproj"));
+std::string FlashExporter::sysdir() {
+	return "flash";
+}
+
+void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+	createDirectory(directory.resolve(sysdir()));
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -79,17 +85,17 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory) {
 }
 
 void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve("flash").resolve(to.toString() + ".mp3"), mp3Encoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
 void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve("flash").resolve(to.toString() + ".mp3"), mp3Encoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
 void FlashExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(from, directory.resolve("flash").resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(from, directory.resolve("flash").resolve(to));
+	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }

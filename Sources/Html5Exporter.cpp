@@ -11,8 +11,14 @@ Html5Exporter::Html5Exporter(Path directory) : directory(directory) {
 	
 }
 
-void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory) {
-	writeFile(directory.resolve("Project.hxproj"));
+std::string Html5Exporter::sysdir() {
+	return "html5";
+}
+
+void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+	createDirectory(directory.resolve(sysdir()));
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -69,9 +75,8 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory) {
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
-		
-	createDirectory(directory.resolve(Paths::get("build", "bin")));
-	writeFile(directory.resolve(Paths::get("build", "bin", "index.html")));
+	
+	writeFile(directory.resolve(Paths::get(sysdir(), "index.html")));
 	p("<!DOCTYPE html>");
 	p("<html lang=\"en\">");
 	p("<head>");
@@ -105,19 +110,19 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory) {
 }
 
 void Html5Exporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".ogg"), oggEncoder);
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".mp4"), aacEncoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
 void Html5Exporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".ogg"), oggEncoder);
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".mp4"), aacEncoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
 void Html5Exporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void Html5Exporter::copyBlob(kake::Platform platform, kake::Path from, kake::Path to) {
-	copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to));
+	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }

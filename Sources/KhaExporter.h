@@ -10,6 +10,7 @@ namespace hake {
 		int height;
 	public:
 		KhaExporter();
+		virtual std::string sysdir() = 0;
 		static void copyFile(kake::Path from, kake::Path to);
 		void setWidthAndHeight(int width, int height);
 		virtual void copyImage(kake::Platform platform, kake::Path from, kake::Path to, Json::Value& asset);

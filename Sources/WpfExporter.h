@@ -6,6 +6,7 @@ namespace hake {
 	class WpfExporter : public CSharpExporter {
 	public:
 		WpfExporter(kake::Path directory);
+		std::string sysdir() override;
 	protected:
 		void exportResources();
 		std::string backendDir() override;

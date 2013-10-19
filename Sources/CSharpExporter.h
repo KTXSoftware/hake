@@ -7,7 +7,7 @@ namespace hake {
 	class CSharpExporter : public KhaExporter {
 	public:
 		CSharpExporter(kake::Path directory);
-		void exportSolution(kake::Platform platform, kake::Path haxeDirectory) override;
+		void exportSolution(kake::Platform platform, kake::Path haxeDirectory, kake::Path from) override;
 		void copyImage(kake::Platform platform, kake::Path from, kake::Path to, Json::Value& asset) override;
 		void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
 		void copySound(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;

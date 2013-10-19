@@ -237,13 +237,13 @@ namespace {
 				else if (asset["type"].string() == "blob")  exporter->copyBlob(platform, from.resolve(Paths::get("Assets", asset["file"].string())), Paths::get(asset["file"].string()));
 			}
 			
-			addShaders(platform, project, to, temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
-			addShaders(platform, project, to, temp, from.resolve(Paths::get("Kha", "Sources", "Shaders")), kfx);
+			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
+			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Kha", "Sources", "Shaders")), kfx);
 			
 			project.save(temp.resolve("project.kha"));
 			exporter->copyBlob(platform, temp.resolve("project.kha"), Paths::get("project.kha"));
 		}
-		if (haxeDirectory.path != "") exporter->exportSolution(platform, haxeDirectory);
+		if (haxeDirectory.path != "") exporter->exportSolution(platform, haxeDirectory, from);
 		
 		std::string name = from.toAbsolutePath().getFileName();
 		
@@ -251,7 +251,7 @@ namespace {
 			std::vector<std::string> options;
 			options.push_back("-D");
 			options.push_back("no-compilation");
-			executeHaxe(haxeDirectory, from, "Kore", "cpp", options);
+			executeHaxe(haxeDirectory, from, to.resolve(Paths::get(exporter->sysdir() + "-build", "Sources")), "Kore", "cpp", options);
 			
 			{
 				std::ofstream out(from.resolve("kake.lua").toString().c_str());
@@ -423,7 +423,7 @@ namespace {
 int main(int argc, char** argv) {
 	Random::init(rand());
 	std::string from = ".";
-	std::string to = "build/bin";
+	std::string to = "build";
 	
 #ifdef SYS_WINDOWS
 	Platform platform = Platform::Windows;
@@ -467,8 +467,8 @@ int main(int argc, char** argv) {
 		else if (startsWith(arg, "mp3=")) mp3Encoder = arg.substr(4);
 		else if (startsWith(arg, "kfx=")) kfx = arg.substr(4);
 
-		else if (arg == "from=") from = arg.substr(5);
-		else if (arg == "to=") to = arg.substr(3);
+		else if (startsWith(arg, "from=")) from = arg.substr(5);
+		else if (startsWith(arg, "to=")) to = arg.substr(3);
 	}
 	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx);
 }

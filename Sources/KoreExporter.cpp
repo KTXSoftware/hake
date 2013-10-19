@@ -9,9 +9,13 @@ using namespace kake;
 KoreExporter::KoreExporter(Path directory) : directory(directory) {
 	
 }
+
+std::string KoreExporter::sysdir() {
+	return "kore";
+}
 	
-void KoreExporter::exportSolution(Platform platform, Path haxeDirectory) {
-	writeFile(directory.resolve("Project.hxproj"));
+void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -71,21 +75,21 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory) {
 }
 	
 void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	if (platform == Android)  convertSound(from, directory.resolve(Paths::get("kore", "assets")).resolve(to.toString() + ".ogg"), oggEncoder);
-	else convertSound(from, directory.resolve("kore").resolve(to.toString() + ".ogg"), oggEncoder);
+	if (platform == Android)  convertSound(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".ogg"), oggEncoder);
+	else convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
 }
 
 void KoreExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	if (platform == Android) copyFile(from, directory.resolve(Paths::get("kore", "assets")).resolve(to.toString() + ".wav"));
-	else copyFile(from, directory.resolve("kore").resolve(to.toString() + ".wav"));
+	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".wav"));
+	else copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
 }
 
 void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	if (platform == Android) exportImage(from, directory.resolve(Paths::get("kore", "assets")).resolve(to), asset);
-	else exportImage(from, directory.resolve("kore").resolve(to), asset);
+	if (platform == Android) exportImage(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to), asset);
+	else exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
-	if (platform == Android) copyFile(from, directory.resolve(Paths::get("kore", "assets")).resolve(to));
-	else copyFile(from, directory.resolve("kore").resolve(to));
+	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to));
+	else copyFile(from, directory.resolve(sysdir()).resolve(to));
 }

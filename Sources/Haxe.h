@@ -4,5 +4,5 @@
 #include <vector>
 
 namespace hake {
-	void executeHaxe(kake::Path haxeDirectory, kake::Path directory, std::string backendDir, std::string language, std::vector<std::string> options);
+	void executeHaxe(kake::Path haxeDirectory, kake::Path from, kake::Path to, std::string backendDir, std::string language, std::vector<std::string> options);
 }

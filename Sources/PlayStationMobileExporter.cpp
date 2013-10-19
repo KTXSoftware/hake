@@ -9,12 +9,16 @@ PlayStationMobileExporter::PlayStationMobileExporter(Path directory) : CSharpExp
 
 }
 
+std::string PlayStationMobileExporter::sysdir() {
+	return "psm";
+}
+
 std::string PlayStationMobileExporter::backendDir() {
 	return "PSM";
 }
 
 void PlayStationMobileExporter::exportSLN(UUID projectUuid) {
-	writeFile(directory.resolve(Paths::get("psm", "Project.sln")));
+	writeFile(directory.resolve(Paths::get(sysdir() + "-build", "Project.sln")));
 	UUID solutionUuid = UUID::randomUUID();
 		
 	p("Microsoft Visual Studio Solution File, Format Version 11.00");
@@ -48,35 +52,36 @@ void PlayStationMobileExporter::copySound(Platform platform, Path from, Path to,
 }
 
 void PlayStationMobileExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(from, directory.resolve("psm").resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 	files.push_back(Paths::get(asset["file"].string()));
 }
 
 void PlayStationMobileExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(from, directory.resolve("psm").resolve(to));
+	copyFile(from, directory.resolve(sysdir()).resolve(to));
 	files.push_back(to);
 }
 
 void PlayStationMobileExporter::exportResources() {
-	std::ofstream simple_fcg(directory.resolve(Paths::get("psm", "shaders", "Simple.fcg")).toString().c_str());
+	createDirectory(directory.resolve(Paths::get(sysdir() + "-build", "shaders")));
+	std::ofstream simple_fcg(directory.resolve(Paths::get(sysdir() + "-build", "shaders", "Simple.fcg")).toString().c_str());
 	simple_fcg
 		<< "void main(float4 out Color : COLOR, uniform float4 MaterialColor) {\n"
 		<< "\tColor = MaterialColor;\n"
 		<< "}\n";
 
-	std::ofstream simple_vcg(directory.resolve(Paths::get("psm", "shaders", "Simple.vcg")).toString().c_str());
+	std::ofstream simple_vcg(directory.resolve(Paths::get(sysdir() + "-build", "shaders", "Simple.vcg")).toString().c_str());
 	simple_vcg
 		<< "void main(float4 in a_Position : POSITION, float4 out v_Position : POSITION, uniform float4x4 WorldViewProj) {\n"
 		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
 		<< "}\n";
 
-	std::ofstream texture_fcg(directory.resolve(Paths::get("psm", "shaders", "Texture.fcg")).toString().c_str());
+	std::ofstream texture_fcg(directory.resolve(Paths::get(sysdir() + "-build", "shaders", "Texture.fcg")).toString().c_str());
 	texture_fcg
 		<< "void main(float2 in  v_TexCoord : TEXCOORD0, float4 out Color : COLOR, uniform sampler2D Texture0 : TEXUNIT0) {\n"
 		<< "\tColor = tex2D(Texture0, v_TexCoord);\n"
 		<< "}\n";
 
-	std::ofstream texture_vcg(directory.resolve(Paths::get("psm", "shaders", "Texture.vcg")).toString().c_str());
+	std::ofstream texture_vcg(directory.resolve(Paths::get(sysdir() + "-build", "shaders", "Texture.vcg")).toString().c_str());
 	texture_vcg
 		<< "void main(float4 in a_Position : POSITION, float2 in a_TexCoord : TEXCOORD0, float4 out v_Position : POSITION, float2 out v_TexCoord : TEXCOORD0, uniform float4x4 WorldViewProj) {\n"
 		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
@@ -85,7 +90,7 @@ void PlayStationMobileExporter::exportResources() {
 }
 
 void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {
-	writeFile(directory.resolve(Paths::get("psm", "Project.csproj")));
+	writeFile(directory.resolve(Paths::get(sysdir() + "-build", "Project.csproj")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<Project DefaultTargets=\"Build\" ToolsVersion=\"4.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
 		p("<PropertyGroup>", 1);
@@ -124,7 +129,7 @@ void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {
 			p("<Reference Include=\"Sce.PlayStation.Core\" />", 2);
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
-			includeFiles(directory.resolve(Paths::get("psm", "Sources", "src")), directory.resolve(Paths::get("psm")));
+			includeFiles(directory.resolve(Paths::get(sysdir() + "-build", "Sources", "src")), directory.resolve(sysdir()));
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			p("<ShaderProgram Include=\"shaders\\Simple.fcg\" />", 2);
