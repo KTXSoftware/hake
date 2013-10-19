@@ -215,7 +215,7 @@ namespace {
 			break;
 		default:
 			kore = true;
-			exporter = new KoreExporter(to);
+			exporter = new KoreExporter(platform, to);
 			break;
 		}
 		
@@ -270,8 +270,8 @@ namespace {
 				//"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cc"
 				files.push_back("Kha/Backends/Kore/*.cpp");
 				files.push_back("Kha/Backends/Kore/*.h");
-				files.push_back("build/Sources/**.h");
-				files.push_back("build/Sources/**.cpp");
+				files.push_back(replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString() + "/Sources/**.h", '\\', '/'));
+				files.push_back(replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString() + "/Sources/**.cpp", '\\', '/'));
 				out << "project:addFiles(\n";
 				out << "\"" + files[0] + "\"";
 				for (unsigned i = 1; i < files.size(); ++i) {
@@ -286,14 +286,14 @@ namespace {
 					<< "\"Kha/Backends/kxcpp/src/hx/Scriptable.cpp\", "
 					<< "\"**/src/__main__.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/NekoAPI.cpp\")\n";
-				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"build/Sources/include\", "
+				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"" + replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString(), '\\', '/') + "/Sources/include\", "
 					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/kxcpp/runtime/libs/nekoapi\");\n";
-				out << "project:setDebugDir(\"build/bin\")\n";
+				out << "project:setDebugDir(\"" + replace(to.resolve(Paths::get(exporter->sysdir())).toString(), '\\', '/') + "\")\n";
 				if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
 				if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
-				out << "project:addDefine(\"KORE_DEBUGDIR=\\\"bin\\\"\")\n";
+				//out << "project:addDefine(\"KORE_DEBUGDIR=\\\"bin\\\"\")\n";
 				out << "project:addDefine(\"STATIC_LINK\")\n";
 				out << "project:addDefine(\"PCRE_STATIC\")\n";
 				out << "project:addDefine(\"HXCPP_SET_PROP\")\n";
@@ -396,7 +396,8 @@ namespace {
 				if (Options::getIntermediateDrive() != "") options.push_back("intermediate=" + Options::getIntermediateDrive());
 				options.push_back("gfx=" + gfx);
 				options.push_back("vs=" + vs);
-				if (from.toString() != ".") options.push_back(from.toString());
+				if (from.toString() != ".") options.push_back("from=" + from.toString());
+				options.push_back("to=" + to.resolve(Paths::get(exporter->sysdir() + "-build")).toString());
 				executeSync(exe, options);
 			}
 		}

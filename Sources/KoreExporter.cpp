@@ -6,12 +6,31 @@
 using namespace hake;
 using namespace kake;
 
-KoreExporter::KoreExporter(Path directory) : directory(directory) {
+KoreExporter::KoreExporter(Platform platform, Path directory) : directory(directory), platform(platform) {
 	
 }
 
 std::string KoreExporter::sysdir() {
-	return "kore";
+	switch (platform) {
+	case Windows:
+		return "windows";
+	case WindowsRT:
+		return "winrt";
+	case PlayStation3:
+		return "ps3";
+	case iOS:
+		return "ios";
+	case OSX:
+		return "osx";
+	case Android:
+		return "android";
+	case Xbox360:
+		return "xbox360";
+	case Linux:
+		return "linux";
+	default:
+		return "kore";
+	}
 }
 	
 void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {

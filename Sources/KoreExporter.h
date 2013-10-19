@@ -5,7 +5,7 @@
 namespace hake {
 	class KoreExporter : public KhaExporter {
 	public:
-		KoreExporter(kake::Path directory);
+		KoreExporter(kake::Platform platform, kake::Path directory);
 		std::string sysdir() override;
 		void exportSolution(kake::Platform platform, kake::Path haxeDirectory, kake::Path from) override;
 		void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
@@ -14,5 +14,6 @@ namespace hake {
 		void copyBlob(kake::Platform platform, kake::Path from, kake::Path to) override;
 	private:
 		kake::Path directory;
+		kake::Platform platform;
 	};
 }
