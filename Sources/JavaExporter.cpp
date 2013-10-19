@@ -11,9 +11,7 @@ JavaExporter::JavaExporter(Path directory) : directory(directory) {
 }
 
 void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory) {
-	createDirectory(directory.resolve("build"));
-	
-	writeFile(directory.resolve(Paths::get("build", "Project.hxproj")));
+	writeFile(directory.resolve("Project.hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -71,7 +69,7 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 	p("</project>");
 	closeFile();
 		
-	Path p = directory.resolve("build").relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
+	Path p = directory.resolve("java").relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
 	std::vector<std::string> options;
 	options.push_back("-D");
 	options.push_back("no-compilation");
@@ -87,7 +85,7 @@ std::string JavaExporter::backend() {
 }
 
 void JavaExporter::exportEclipseProject() {
-	writeFile(directory.resolve(Paths::get("build", ".classpath")));
+	writeFile(directory.resolve(Paths::get("java", ".classpath")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<classpath>");
 	p("\t<classpathentry kind=\"src\" path=\"Sources/src\"/>");
@@ -96,7 +94,7 @@ void JavaExporter::exportEclipseProject() {
 	p("</classpath>");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("build", ".project")));
+	writeFile(directory.resolve(Paths::get("java", ".project")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<projectDescription>");
 	p("\t<name>" + getCurrentDirectoryName(directory) + "</name>");
@@ -118,17 +116,17 @@ void JavaExporter::exportEclipseProject() {
 }
 
 void JavaExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve("build").resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve("java").resolve(to.toString() + ".wav"));
 }
 
 void JavaExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve("build").resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve("java").resolve(to.toString() + ".wav"));
 }
 
 void JavaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(directory.resolve(from), directory.resolve("build").resolve(to), asset);
+	exportImage(from, directory.resolve("java").resolve(to), asset);
 }
 
 void JavaExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(directory.resolve(from), directory.resolve("build").resolve(to));
+	copyFile(from, directory.resolve("java").resolve(to));
 }

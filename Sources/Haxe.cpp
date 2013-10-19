@@ -22,6 +22,6 @@ void hake::executeHaxe(Path haxeDirectory, Path directory, std::string backendDi
 	args.push_back(directory.resolve(Paths::get("build", "Sources")).toString());
 	args.push_back("-main");
 	args.push_back("Main");
-	for (int i = 0; i < options.size(); ++i) args.push_back(options[i]);
+	for (unsigned i = 0; i < options.size(); ++i) args.push_back(options[i]);
 	executeSync(exe.toString(), args, std::string("HAXE_STD_PATH=") + haxeDirectory.resolve("std").toString());
 }

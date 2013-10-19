@@ -2,6 +2,7 @@
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 
@@ -98,15 +99,15 @@ void Image::save(Path path) {
 	stbi_write_png(path.toString().c_str(), this->x, this->y, 4, data, 0);
 }
 
-static int round(float value) {
+static int roundi(float value) {
 	return (int)std::floor(value + 0.5f);
 }
 
 unsigned Image::sample(float x, float y) {
 	float posx = x * this->x;
 	float posy = y * this->y;
-	int xx = round(posx);
-	int yy = round(posy);
+	int xx = roundi(posx);
+	int yy = roundi(posy);
 	xx = std::min(std::max(0, xx), this->x - 1);
 	yy = std::min(std::max(0, yy), this->y - 1);
 	return pixel(xx, yy);

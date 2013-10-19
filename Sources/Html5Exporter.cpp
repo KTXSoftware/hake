@@ -12,9 +12,7 @@ Html5Exporter::Html5Exporter(Path directory) : directory(directory) {
 }
 
 void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory) {
-	createDirectory(directory.resolve("build"));
-	
-	writeFile(directory.resolve(Paths::get("build", "Project.hxproj")));
+	writeFile(directory.resolve("Project.hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);

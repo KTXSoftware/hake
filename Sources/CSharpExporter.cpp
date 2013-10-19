@@ -23,9 +23,7 @@ void CSharpExporter::includeFiles(Path dir, Path baseDir) {
 }
 
 void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory) {
-	createDirectory(directory.resolve("build"));
-		
-	writeFile(directory.resolve(Paths::get("build", "Project.hxproj")));
+	writeFile(directory.resolve("Project.hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
 		p("<!-- Output SWF options -->", 1);
@@ -97,7 +95,7 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 }
 
 void CSharpExporter::exportSLN(UUID projectUuid) {
-	writeFile(directory.resolve(Paths::get("build", "Project.sln")));
+	writeFile(directory.resolve(Paths::get("cs", "Project.sln")));
 	UUID solutionUuid = UUID::randomUUID();
 		
 	p("Microsoft Visual Studio Solution File, Format Version 11.00");
@@ -131,9 +129,9 @@ void CSharpExporter::copySound(Platform platform, Path from, Path to, std::strin
 }
 
 void CSharpExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
+	exportImage(from, directory.resolve("cs").resolve(to), asset);
 }
 	
 void CSharpExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to));
+	copyFile(from, directory.resolve("cs").resolve(to));
 }

@@ -11,9 +11,9 @@ WpfExporter::WpfExporter(Path directory) : CSharpExporter(directory) {
 }
 
 void WpfExporter::exportResources() {
-	Files::createDirectories(directory.resolve(Paths::get("build", "Properties")));
+	Files::createDirectories(directory.resolve(Paths::get("wpf", "Properties")));
 
-	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString().c_str());
+	std::ofstream assemblyInfo(directory.resolve(Paths::get("wpf", "Properties", "AssemblyInfo.cs")).toString().c_str());
 	assemblyInfo
 		<< "using System.Reflection;\n"
 		<< "using System.Resources;\n"
@@ -40,7 +40,7 @@ void WpfExporter::exportResources() {
 		<< "[assembly: AssemblyVersion(\"1.0.0.0\")]\n"
 		<< "[assembly: AssemblyFileVersion(\"1.0.0.0\")]\n";
 
-	std::ofstream resourcesDesigner(directory.resolve(Paths::get("build", "Properties", "Resources.Designer.cs")).toString().c_str());
+	std::ofstream resourcesDesigner(directory.resolve(Paths::get("wpf", "Properties", "Resources.Designer.cs")).toString().c_str());
 	resourcesDesigner
 		<< "namespace WpfApplication1.Properties {\n"
 		<< "\t[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"System.Resources.Tools.StronglyTypedResourceBuilder\", \"4.0.0.0\")]\n"
@@ -83,7 +83,7 @@ void WpfExporter::exportResources() {
 		<< "\t}\n"
 		<< "}\n";
 
-	std::ofstream resources(directory.resolve(Paths::get("build", "Properties", "Resources.resx")).toString().c_str());
+	std::ofstream resources(directory.resolve(Paths::get("wpf", "Properties", "Resources.resx")).toString().c_str());
 	resources
 		<< "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
 		<< "<root>\n"
@@ -144,7 +144,7 @@ void WpfExporter::exportResources() {
 		<< "</resheader>\n"
 		<< "</root>\n";
 
-	std::ofstream settingsDesigner(directory.resolve(Paths::get("build", "Properties", "Settings.Designer.cs")).toString().c_str());
+	std::ofstream settingsDesigner(directory.resolve(Paths::get("wpf", "Properties", "Settings.Designer.cs")).toString().c_str());
 	settingsDesigner
 		<< "namespace WpfApplication1.Properties\n"
 		<< "{\n"
@@ -164,7 +164,7 @@ void WpfExporter::exportResources() {
 		<< "\t}\n"
 		<< "}\n";
 	
-	std::ofstream settings(directory.resolve(Paths::get("build", "Properties", "Settings.settings")).toString().c_str());
+	std::ofstream settings(directory.resolve(Paths::get("wpf", "Properties", "Settings.settings")).toString().c_str());
 	settings
 		<< "<?xml version='1.0' encoding='utf-8'?>\n"
 		<< "<SettingsFile xmlns=\"uri:settings\" CurrentProfile=\"(Default)\">\n"
@@ -180,7 +180,7 @@ std::string WpfExporter::backendDir() {
 }
 
 void WpfExporter::exportCsProj(UUID projectUuid) {
-	writeFile(directory.resolve(Paths::get("build", "Project.csproj")));
+	writeFile(directory.resolve("Project.csproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<Project ToolsVersion=\"4.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
 		p("<PropertyGroup>", 1);
@@ -234,7 +234,7 @@ void WpfExporter::exportCsProj(UUID projectUuid) {
 			p("<Reference Include=\"PresentationFramework\" />", 2);
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
-			includeFiles(directory.resolve(Paths::get("build", "Sources", "src")), directory.resolve(Paths::get("build")));
+			includeFiles(directory.resolve(Paths::get("wpf", "Sources", "src")), directory.resolve("wpf"));
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			p("<Compile Include=\"Properties\\AssemblyInfo.cs\">", 2);
@@ -266,9 +266,9 @@ void WpfExporter::exportCsProj(UUID projectUuid) {
 }
 
 void WpfExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve("build").resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve("wpf").resolve(to.toString() + ".wav"));
 }
 
 void WpfExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "bin")).resolve(to.toString() + ".mp4"), aacEncoder);
+	convertSound(from, directory.resolve("wpf").resolve(to.toString() + ".mp4"), aacEncoder);
 }

@@ -11,7 +11,7 @@ XnaExporter::XnaExporter(Path directory) : CSharpExporter(directory) {
 }
 
 void XnaExporter::exportResources() {
-	std::ofstream assemblyInfo(directory.resolve(Paths::get("build", "Properties", "AssemblyInfo.cs")).toString().c_str());
+	std::ofstream assemblyInfo(directory.resolve(Paths::get("xna", "Properties", "AssemblyInfo.cs")).toString().c_str());
 	assemblyInfo
 		<< "using System.Reflection;\n"
 		<< "using System.Runtime.CompilerServices;\n"
@@ -37,7 +37,7 @@ std::string XnaExporter::backendDir() {
 }
 
 void XnaExporter::exportSLN(UUID projectUuid) {
-	writeFile(directory.resolve(Paths::get("build", "Project.sln")));
+	writeFile(directory.resolve("Project.sln"));
 	UUID solutionUuid = UUID::randomUUID();
 	UUID contentUuid = UUID::randomUUID();
 		
@@ -113,15 +113,15 @@ void XnaExporter::exportSLN(UUID projectUuid) {
 }
 
 void XnaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "bin")).resolve(to), asset);
+	exportImage(from, directory.resolve("xna").resolve(to), asset);
 	images.push_back(asset["file"].string());
 }
 
 void XnaExporter::exportCsProj(UUID projectUuid) {
-	Ball::the()->exportTo(directory.resolve(Paths::get("build", "GameThumbnail.png")), 64, 64, Color::transparent, directory);
-	Ball::the()->exportToWindowsIcon(directory.resolve(Paths::get("build", "Game.ico")), directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("xna", "GameThumbnail.png")), 64, 64, Color::transparent, directory);
+	Ball::the()->exportToWindowsIcon(directory.resolve(Paths::get("xna", "Game.ico")), directory);
 		
-	writeFile(directory.resolve(Paths::get("build", "Project.csproj")));
+	writeFile(directory.resolve(Paths::get("xna", "Project.csproj")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<Project DefaultTargets=\"Build\" ToolsVersion=\"4.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
 		p("<PropertyGroup>", 1);
@@ -197,7 +197,7 @@ void XnaExporter::exportCsProj(UUID projectUuid) {
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			p("<Compile Include=\"Properties\\AssemblyInfo.cs\" />", 2);
-			includeFiles(directory.resolve(Paths::get("build", "Sources", "src")), directory.resolve(Paths::get("build")));
+			includeFiles(directory.resolve(Paths::get("xna", "Sources", "src")), directory.resolve(Paths::get("xna")));
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			p("<Content Include=\"Game.ico\" />", 2);

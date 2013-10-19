@@ -15,7 +15,7 @@ std::string DalvikExporter::backend() {
 }
 
 void DalvikExporter::exportEclipseProject() {
-	writeFile(directory.resolve(Paths::get("build", ".classpath")));
+	writeFile(directory.resolve(Paths::get("dalvik", ".classpath")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<classpath>");
 		p("<classpathentry kind=\"src\" path=\"gen\"/>", 1);
@@ -25,7 +25,7 @@ void DalvikExporter::exportEclipseProject() {
 	p("</classpath>");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("build", ".project")));
+	writeFile(directory.resolve(Paths::get("dalvik", ".project")));
 	p("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 	p("<projectDescription>");
 		p("<name>" + getCurrentDirectoryName(directory) + "</name>", 1);
@@ -61,7 +61,7 @@ void DalvikExporter::exportEclipseProject() {
 	p("</projectDescription>");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("build", "AndroidManifest.xml")));
+	writeFile(directory.resolve(Paths::get("dalvik", "AndroidManifest.xml")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\" package=\"kha.android\" android:versionCode=\"1\" android:versionName=\"1.0\">");
 		p("<application android:icon=\"@drawable/icon\" android:label=\"@string/app_name\">", 1);
@@ -75,7 +75,7 @@ void DalvikExporter::exportEclipseProject() {
 	p("</manifest>");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("build", "proguard.cfg")));
+	writeFile(directory.resolve(Paths::get("dalvik", "proguard.cfg")));
 	p("-optimizationpasses 5");
 	p("-dontusemixedcaseclassnames");
 	p("-dontskipnonpubliclibraryclasses");
@@ -114,13 +114,13 @@ void DalvikExporter::exportEclipseProject() {
 	p("}");
 	closeFile();
 		
-	writeFile(directory.resolve(Paths::get("build", "project.properties")));
+	writeFile(directory.resolve(Paths::get("dalvik", "project.properties")));
 	p("target=android-7");
 	closeFile();
 		
-	createDirectory(directory.resolve(Paths::get("build", ".settings")));
+	createDirectory(directory.resolve(Paths::get("dalvik", ".settings")));
 		
-	writeFile(directory.resolve(Paths::get("build", ".settings", "org.eclipse.jdt.core.prefs")));
+	writeFile(directory.resolve(Paths::get("dalvik", ".settings", "org.eclipse.jdt.core.prefs")));
 	p("#Thu Oct 20 20:02:57 CEST 2011");
 	p("eclipse.preferences.version=1");
 	p("org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled");
@@ -135,27 +135,27 @@ void DalvikExporter::exportEclipseProject() {
 	p("org.eclipse.jdt.core.compiler.source=1.6");
 	closeFile();
 
-	createDirectory(directory.resolve(Paths::get("build", "res")));
-	createDirectory(directory.resolve(Paths::get("build", "res", "drawable-hdpi")));
-	createDirectory(directory.resolve(Paths::get("build", "res", "drawable-mdpi")));
-	createDirectory(directory.resolve(Paths::get("build", "res", "drawable-ldpi")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res", "drawable-hdpi")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res", "drawable-mdpi")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res", "drawable-ldpi")));
 	
-	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-hdpi", "icon.png")), 72, 72, Color::transparent, directory);
-	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-mdpi", "icon.png")), 48, 48, Color::transparent, directory);
-	Ball::the()->exportTo(directory.resolve(Paths::get("build", "res", "drawable-ldpi", "icon.png")), 36, 36, Color::transparent, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("dalvik", "res", "drawable-hdpi", "icon.png")), 72, 72, Color::transparent, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("dalvik", "res", "drawable-mdpi", "icon.png")), 48, 48, Color::transparent, directory);
+	Ball::the()->exportTo(directory.resolve(Paths::get("dalvik", "res", "drawable-ldpi", "icon.png")), 36, 36, Color::transparent, directory);
 	
-	createDirectory(directory.resolve(Paths::get("build", "res", "layout")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res", "layout")));
 	
-	writeFile(directory.resolve(Paths::get("build", "res", "layout", "main.xml")));
+	writeFile(directory.resolve(Paths::get("dalvik", "res", "layout", "main.xml")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\" android:orientation=\"vertical\" android:layout_width=\"fill_parent\" android:layout_height=\"fill_parent\">");
 		p("<TextView android:layout_width=\"fill_parent\" android:layout_height=\"wrap_content\" android:text=\"@string/hello\" />", 1);
 	p("</LinearLayout>");
 	closeFile();
 	
-	createDirectory(directory.resolve(Paths::get("build", "res", "values")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "res", "values")));
 	
-	writeFile(directory.resolve(Paths::get("build", "res", "values", "strings.xml")));
+	writeFile(directory.resolve(Paths::get("dalvik", "res", "values", "strings.xml")));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<resources>");
 		p("<string name=\"hello\">Hello World!</string>", 1);
@@ -163,21 +163,21 @@ void DalvikExporter::exportEclipseProject() {
 	p("</resources>");
 	closeFile();
 	
-	createDirectory(directory.resolve(Paths::get("build", "gen")));
+	createDirectory(directory.resolve(Paths::get("dalvik", "gen")));
 }
 
 void DalvikExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "assets", to.toString() + ".ogg")), oggEncoder);
+	convertSound(from, directory.resolve(Paths::get("dalvik", "assets", to.toString() + ".ogg")), oggEncoder);
 }
 
 void DalvikExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	copyFile(directory.resolve(from.toString() + ".wav"), directory.resolve(Paths::get("build", "assets", to.toString() + ".wav")));
+	copyFile(from, directory.resolve(Paths::get("dalvik", "assets", to.toString() + ".wav")));
 }
 
 void DalvikExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to), asset);
+	exportImage(from, directory.resolve(Paths::get("dalvik", "assets")).resolve(to), asset);
 }
 
 void DalvikExporter::copyBlob(Platform platform, Path from, Path to) {
-	copyFile(directory.resolve(from), directory.resolve(Paths::get("build", "assets")).resolve(to));
+	copyFile(from, directory.resolve(Paths::get("dalvik", "assets")).resolve(to));
 }
