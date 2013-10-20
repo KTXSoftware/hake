@@ -76,8 +76,17 @@ std::string Path::toString() {
 	else return path;
 }
 
+namespace {
+	std::string fix(std::string path) {
+		path = replace(path, '\\', '/');
+		path = replace(path, "//", "/");
+		return path;
+	}
+}
+
 Path Paths::get(std::string a) {
 	Path path;
+	a = fix(a);
 	if (a[a.size() - 1] == '/' || a[a.size() - 1] == '\\') path.path = a.substr(0, a.size() - 1);
 	else path.path = a;
 	return path;
@@ -85,6 +94,8 @@ Path Paths::get(std::string a) {
 
 Path Paths::get(std::string a, std::string b) {
 	Path path;
+	a = fix(a);
+	b = fix(b);
 	if (startsWith(b, "./")) b = b.substr(2);
 	if (a == ".") path.path = b;
 	else path.path = concat(a, b);
@@ -93,6 +104,9 @@ Path Paths::get(std::string a, std::string b) {
 
 Path Paths::get(std::string a, std::string b, std::string c) {
 	Path path;
+	a = fix(a);
+	b = fix(b);
+	c = fix(c);
 	if (startsWith(b, "./")) b = b.substr(2);
 	if (startsWith(c, "./")) c = c.substr(2);
 	if (a == ".") path.path = concat(b, c);
@@ -102,6 +116,10 @@ Path Paths::get(std::string a, std::string b, std::string c) {
 
 Path Paths::get(std::string a, std::string b, std::string c, std::string d) {
 	Path path;
+	a = fix(a);
+	b = fix(b);
+	c = fix(c);
+	d = fix(d);
 	if (startsWith(b, "./")) b = b.substr(2);
 	if (startsWith(c, "./")) c = c.substr(2);
 	if (startsWith(d, "./")) d = d.substr(2);
