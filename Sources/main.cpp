@@ -182,7 +182,7 @@ namespace {
 		}
 	}
 
-	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx) {
+	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx, bool khafolders) {
 		std::cout << "Generating Kha project." << std::endl;
 		
 		Files::createDirectories(to);
@@ -231,10 +231,30 @@ namespace {
 
 			for (int i = 0; i < project["assets"].size(); ++i) {
 				Json::Value& asset = project["assets"][i];
-				if      (asset["type"].string() == "image") exporter->copyImage(platform, from.resolve(Paths::get("Assets", "Graphics", asset["file"].string())), Paths::get(asset["file"].string()), asset);
-				else if (asset["type"].string() == "music") exporter->copyMusic(platform, from.resolve(Paths::get("Assets", "Sound", asset["file"].string() + ".wav")), Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
-				else if (asset["type"].string() == "sound") exporter->copySound(platform, from.resolve(Paths::get("Assets", "Sound", asset["file"].string() + ".wav")), Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
-				else if (asset["type"].string() == "blob")  exporter->copyBlob(platform, from.resolve(Paths::get("Assets", asset["file"].string())), Paths::get(asset["file"].string()));
+				if (asset["type"].string() == "image") {
+					Path file;
+					if (khafolders) file = from.resolve(Paths::get("Assets", "Graphics", asset["file"].string()));
+					else file = from.resolve(asset["file"].string());
+					exporter->copyImage(platform, file, Paths::get(asset["file"].string()), asset);
+				}
+				else if (asset["type"].string() == "music") {
+					Path file;
+					if (khafolders) file = from.resolve(Paths::get("Assets", "Sound", asset["file"].string() + ".wav"));
+					else file = from.resolve(asset["file"].string() + ".wav");
+					exporter->copyMusic(platform, file, Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
+				}
+				else if (asset["type"].string() == "sound") {
+					Path file;
+					if (khafolders) file = from.resolve(Paths::get("Assets", "Sound", asset["file"].string() + ".wav"));
+					else file = from.resolve(asset["file"].string() + ".wav");
+					exporter->copySound(platform, file, Paths::get(asset["file"].string()), oggEncoder, aacEncoder, mp3Encoder);
+				}
+				else if (asset["type"].string() == "blob") {
+					Path file;
+					if (khafolders) file = from.resolve(Paths::get("Assets", asset["file"].string()));
+					else file = from.resolve(asset["file"].string());
+					exporter->copyBlob(platform, file, Paths::get(asset["file"].string()));
+				}
 			}
 			
 			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
@@ -410,9 +430,9 @@ namespace {
 		return Files::exists(directory.resolve("Kha")) || Files::exists(directory.resolve("project.kha"));
 	}
 
-	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx) {
+	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx, bool khafolders) {
 		if (isKhaProject(from)) {
-			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx);
+			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx, khafolders);
 		}
 		else {
 			std::cerr << "Kha directory not found." << std::endl;
@@ -439,6 +459,7 @@ int main(int argc, char** argv) {
 	std::string aacEncoder;
 	std::string mp3Encoder;
 	std::string kfx;
+	bool khafolders = true;
 
 	for (int i = 1; i < argc; ++i) {
 		std::string arg(argv[i]);
@@ -470,6 +491,8 @@ int main(int argc, char** argv) {
 
 		else if (startsWith(arg, "from=")) from = arg.substr(5);
 		else if (startsWith(arg, "to=")) to = arg.substr(3);
+
+		else if (arg == "nokhafolders") khafolders = false;
 	}
-	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx);
+	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx, khafolders);
 }
