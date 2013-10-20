@@ -407,7 +407,7 @@ namespace {
 	}
 
 	bool isKhaProject(Path directory) {
-		return Files::exists(directory.resolve("Kha"));
+		return Files::exists(directory.resolve("Kha")) || Files::exists(directory.resolve("project.kha"));
 	}
 
 	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx) {

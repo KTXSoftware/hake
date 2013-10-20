@@ -272,7 +272,7 @@ namespace {
 			if (stream.current()->isWhitespace()) stream.advance();
 			if (stream.current()->isArrayEnd()) break;
 			values.push_back(parseValue(stream));
-			stream.advance();
+			if (stream.current()->isKomma()) stream.advance();
 		}
 		stream.advance();
 		return new Json::Array(values);
@@ -379,7 +379,7 @@ void Json::Array::serialize(std::ofstream& stream, int indent, bool newline) {
 }
 
 void Data::save(kake::Path path) {
-	std::ofstream file(path.toString().c_str());
+	std::ofstream file(path.toString());
 	myValue->serialize(file, 0, false);
 	file << "\n";
 }
