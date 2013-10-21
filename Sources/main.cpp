@@ -332,6 +332,7 @@ namespace {
 				out << "project:addDefine(\"ROTATE90\")\n";
 				if (platform == Windows) out << "project:addLib(\"ws2_32\")\n";
 				out << "project:addSubProject(Solution.createProject(\"Kore\"))\n";
+				if (Files::exists(from.resolve("KoreVideo"))) out << "project:addSubProject(Solution.createProject(\"KoreVideo\"))\n";
 				out << "solution:addProject(project)\n";
 			}
 
