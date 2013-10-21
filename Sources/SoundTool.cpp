@@ -7,9 +7,13 @@ using namespace kake;
 
 void hake::convertSound(Path inFilename, Path outFilename, std::string encoder) {
 	if (encoder == "") return;
-	std::string cmd = replace(replace(encoder, "{in}", inFilename.toString()), "{out}", outFilename.toString());
-	auto parts = split(cmd, ' ');
+	//std::string cmd = replace(replace(encoder, "{in}", "\"" + inFilename.toString()) + "\"", "{out}", "\"" + outFilename.toString() + "\"");
+	auto parts = split(encoder, ' ');
 	std::vector<std::string> options;
-	for (unsigned i = 1; i < parts.size(); ++i) options.push_back(parts[i]);
+	for (unsigned i = 1; i < parts.size(); ++i) {
+		if (parts[i] == "{in}") options.push_back(inFilename.toString());
+		else if (parts[i] == "{out}") options.push_back(outFilename.toString());
+		else options.push_back(parts[i]);
+	}
 	executeSync(parts[0], options);
 }
