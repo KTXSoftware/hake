@@ -25,7 +25,7 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<output>", 1);
 		p("<movie outputType=\"Application\" />", 2);
 		p("<movie input=\"\" />", 2);
-		p("<movie path=\"bin\\JSProject.js\" />", 2);
+		p("<movie path=\"html5\\JSProject.js\" />", 2);
 		p("<movie fps=\"0\" />", 2);
 		p("<movie width=\"0\" />", 2);
 		p("<movie height=\"0\" />", 2);

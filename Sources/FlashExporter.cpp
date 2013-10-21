@@ -25,7 +25,7 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<output>", 1);
 		p("<movie outputType=\"Application\" />", 2);
 		p("<movie input=\"\" />", 2);
-		p("<movie path=\"bin\\sml.swf\" />", 2);
+		p("<movie path=\"flash\\sml.swf\" />", 2);
 		p("<movie fps=\"60\" />", 2);
 		std::stringstream w;
 		w << "<movie width=\"" << width << "\" />";
