@@ -2,6 +2,7 @@
 #include "Files.h"
 #include "ImageTool.h"
 #include "SoundTool.h"
+#include "String.h"
 #include <sstream>
 
 using namespace hake;
@@ -85,10 +86,12 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 }
 
 void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
 void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
@@ -98,4 +101,10 @@ void FlashExporter::copyImage(Platform platform, Path from, Path to, Json::Value
 
 void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
+}
+
+std::vector<std::string> FlashExporter::videoExtensions() {
+	std::vector<std::string> extensions;
+	extensions.push_back("mp4");
+	return extensions;
 }

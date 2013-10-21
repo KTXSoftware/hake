@@ -218,6 +218,8 @@ namespace {
 			exporter = new KoreExporter(platform, to);
 			break;
 		}
+
+		Files::createDirectories(to.resolve(exporter->sysdir()));
 		
 		if (Files::exists(from.resolve("project.kha"))) {
 			Kore::FileReader reader(from.resolve("project.kha").toString().c_str());
