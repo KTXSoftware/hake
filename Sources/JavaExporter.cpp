@@ -24,7 +24,7 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 		p("<output>", 1);
 		p("<movie outputType=\"Application\" />", 2);
 		p("<movie input=\"\" />", 2);
-		p("<movie path=\"Paths::get(" + sysdir() + " - build\\Sources\" />", 2);
+		p("<movie path=\"" + sysdir() + " - build\\Sources\" />", 2);
 		p("<movie fps=\"0\" />", 2);
 		p("<movie width=\"0\" />", 2);
 		p("<movie height=\"0\" />", 2);
