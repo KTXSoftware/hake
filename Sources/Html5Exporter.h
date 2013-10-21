@@ -13,6 +13,7 @@ namespace hake {
 		void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
 		void copySound(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
 		void copyBlob(kake::Platform platform, kake::Path from, kake::Path to) override;
+		std::vector<std::string> videoExtensions() override;
 	private:
 		kake::Path directory;
 		//NanoHTTPD server;

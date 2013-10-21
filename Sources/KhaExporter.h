@@ -17,6 +17,7 @@ namespace hake {
 		virtual void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder);
 		virtual void copySound(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder);
 		virtual void copyBlob(kake::Platform platform, kake::Path from, kake::Path to);
+		virtual std::vector<std::string> videoExtensions();
 	protected:
 		static std::string getCurrentDirectoryName(kake::Path directory);
 		static void copyDirectory(kake::Path from, kake::Path to);

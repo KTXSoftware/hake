@@ -255,6 +255,14 @@ namespace {
 					else file = from.resolve(asset["file"].string());
 					exporter->copyBlob(platform, file, Paths::get(asset["file"].string()));
 				}
+				else if (asset["type"].string() == "video") {
+					for (auto ext : exporter->videoExtensions()) {
+						Path file;
+						if (khafolders) file = from.resolve(Paths::get("Assets", "Videos", asset["file"].string() + "." + ext));
+						else file = from.resolve(asset["file"].string() + "." + ext);
+						exporter->copyBlob(platform, file, Paths::get(asset["file"].string() + "." + ext));
+					}
+				}
 			}
 			
 			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);

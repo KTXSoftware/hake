@@ -126,3 +126,10 @@ void Html5Exporter::copyImage(Platform platform, Path from, Path to, Json::Value
 void Html5Exporter::copyBlob(kake::Platform platform, kake::Path from, kake::Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
+
+std::vector<std::string> Html5Exporter::videoExtensions() {
+	std::vector<std::string> extensions;
+	extensions.push_back("mp4");
+	extensions.push_back("webm");
+	return extensions;
+}

@@ -37,3 +37,8 @@ void KhaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& 
 void KhaExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
 void KhaExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
 void KhaExporter::copyBlob(Platform platform, Path from, Path to) { }
+
+std::vector<std::string> KhaExporter::videoExtensions() {
+	std::vector<std::string> extensions;
+	return extensions;
+}

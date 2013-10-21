@@ -276,3 +276,9 @@ void WpfExporter::copySound(Platform platform, Path from, Path to, std::string o
 void WpfExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
+
+std::vector<std::string> WpfExporter::videoExtensions() {
+	std::vector<std::string> extensions;
+	extensions.push_back("wmv");
+	return extensions;
+}
