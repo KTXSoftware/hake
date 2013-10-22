@@ -76,37 +76,27 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 	p("</project>");
 	closeFile();
 	
-	writeFile(directory.resolve(Paths::get(sysdir(), "index.html")));
-	p("<!DOCTYPE html>");
-	p("<html lang=\"en\">");
-	p("<head>");
+	Path index = directory.resolve(Paths::get(sysdir(), "index.html"));
+	if (!Files::exists(index)) {
+		writeFile(index);
+		p("<!DOCTYPE html>");
+		p("<html>");
+		p("<head>");
 		p("<meta charset=\"utf-8\"/>", 1);
-		p("<title>JSProject</title>", 1);
-		p("<meta name=\"description\" content=\"\" />", 1);
-	p("</head>");
-	p("<body>");
-		p("<div id=\"haxe:trace\"></div>", 1);
+		p("<title>Kha</title>", 1);
+		p("</head>");
+		p("<body>");
 		p("<p align=\"center\">", 1);
-			std::stringstream khanvas;
-			khanvas << "<canvas id=\"khanvas\" width=\"" << width << "\" height=\"" << height << "\" style=\"outline: none;\"></canvas>";
-			p(khanvas.str(), 2);
+		std::stringstream khanvas;
+		khanvas << "<canvas id=\"khanvas\" width=\"" << width << "\" height=\"" << height << "\" style=\"outline: none;\"></canvas>";
+		p(khanvas.str(), 2);
 		p("</p>", 1);
-		p("<script type=\"text/vbscript\">", 1);
-			p("Function arr(t)", 2);
-				p("arr = CStr(t)", 3);
-			p("End Function", 2);
-			p("Function arrl(t)", 2);
-				p("arrl = \"\"", 3);
-				p("if LenB(t) mod 2 Then arrl = Chr(AscB(RightB(t,1)))", 3);
-			p("End Function", 2);
-		p("</script>", 1);
+		p("<div id=\"haxe:trace\"></div>", 1);
 		p("<script src=\"JSProject.js\"></script>", 1);
-	p("</body>");
-	p("</html>");
-	closeFile();
-		
-	//if (server != null) server.stop();
-	//server = new NanoHTTPD(8080, directory.resolve(Paths.get("build", "bin")).toAbsolutePath().toFile());
+		p("</body>");
+		p("</html>");
+		closeFile();
+	}
 }
 
 void Html5Exporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
