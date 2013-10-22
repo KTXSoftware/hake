@@ -37,7 +37,7 @@ using namespace hake;
 using namespace kake;
 
 namespace {
-	std::string fromPlatform(Platform platform) {
+	/*std::string fromPlatform(Platform platform) {
 		switch (platform) {
 		case Windows:
 			return "Windows";
@@ -60,9 +60,9 @@ namespace {
 		default:
 			return "unknown";
 		}
-	}
+	}*/
 
-	std::string shaderLang(Platform platform) {
+	/*std::string shaderLang(Platform platform) {
 		switch (platform) {
 			case Windows:
 				switch (Options::getGraphicsApi()) {
@@ -95,7 +95,7 @@ namespace {
 			default:
 				return "unknown";
 		}
-	}
+	}*/
 }
 
 	void compileShader(std::string kfx, std::string type, Path from, Path to, Path temp) {

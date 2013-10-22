@@ -53,7 +53,7 @@ Path Path::resolve(Path subpath) {
 Path Path::parent() {
 	if (this->path == ".") return toAbsolutePath().parent();
 	else {
-		for (int i = path.size() - 1; i >= 0; --i) {
+		for (int i = static_cast<int>(path.size() - 1); i >= 0; --i) {
 			if (path[i] == '/' || path[i] == '\\') {
 				return Paths::get(path.substr(0, i));
 			}
@@ -63,7 +63,7 @@ Path Path::parent() {
 }
 
 std::string Path::getFileName() {
-	for (int i = path.size() - 1; i >= 0; --i) {
+	for (int i = static_cast<int>(path.size() - 1); i >= 0; --i) {
 		if (path[i] == '/' || path[i] == '\\') {
 			return path.substr(i + 1);
 		}

@@ -10,7 +10,7 @@ namespace {
 	const int bmpHeaderSize = 40;
 	Ball* instance = nullptr;
 
-	int convertByteArrayToInt(std::vector<byte> buffer) {
+	/*int convertByteArrayToInt(std::vector<byte> buffer) {
 		if (buffer.size() != 4) throw new std::exception;
 
 		int 
@@ -20,7 +20,7 @@ namespace {
 		value |= (0xFF & buffer[3]);
 
 		return value;
-	}
+	}*/
 
 	std::vector<byte> convertIntToByteArray(unsigned val) {
 		std::vector<byte> buffer;
@@ -154,7 +154,7 @@ void Ball::exportToWindowsIcon(Path filename, Path directory) {
 
 	scale(256, 256, transparent, directory)->save(stream);
 			
-	std::vector<byte> pngSize = convertIntToByteArrayLE(stream.size() - (iconHeaderSize + iconDirEntrySize * 4 + getBMPSize(16, 16) + getBMPSize(32, 32) + getBMPSize(48, 48)));
+	std::vector<byte> pngSize = convertIntToByteArrayLE(static_cast<int>(stream.size()) - (iconHeaderSize + iconDirEntrySize * 4 + getBMPSize(16, 16) + getBMPSize(32, 32) + getBMPSize(48, 48)));
 	for (int i = 0; i < 4; ++i) stream.set(i + iconHeaderSize + iconDirEntrySize * 3 + 8, pngSize[i]);
 	
 	stream.save(filename);
@@ -175,17 +175,17 @@ void Ball::exportToMacIcon(Path filename, Path directory) {
 	stream.put('i'); stream.put('c'); stream.put('0'); stream.put('8');
 	stream.put('-'); stream.put('-'); stream.put('-'); stream.put('-');
 	scale(256, 256, transparent, directory)->save(stream);
-	int icon08size = stream.size() - 8;			
+	int icon08size = static_cast<int>(stream.size() - 8);
 	stream.put('i'); stream.put('c'); stream.put('0'); stream.put('9');
 	stream.put('-'); stream.put('-'); stream.put('-'); stream.put('-');
 	scale(512, 512, transparent, directory)->save(stream);
-	int icon09size = stream.size() - icon08size - 8;
+	int icon09size = static_cast<int>(stream.size() - icon08size - 8);
 	stream.put('i'); stream.put('c'); stream.put('1'); stream.put('0');
 	stream.put('-'); stream.put('-'); stream.put('-'); stream.put('-');
 	scale(1024, 1024, transparent, directory)->save(stream);
-	int icon10size = stream.size() - icon09size - icon08size - 8;
+	int icon10size = static_cast<int>(stream.size() - icon09size - icon08size - 8);
 	
-	std::vector<byte> size = convertIntToByteArray(stream.size());
+	std::vector<byte> size = convertIntToByteArray(static_cast<int>(stream.size()));
 	for (int i = 0; i < 4; ++i) stream.set( 4 + i, size[i]);
 	
 	size = convertIntToByteArray(icon08size);

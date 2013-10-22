@@ -57,7 +57,7 @@ namespace Json {
 		Array(std::vector<Value*>& values) : myValues(values) { }
 		~Array() { for (size_t i = 0; i < myValues.size(); ++i) delete myValues[i]; }
 		virtual Value& operator[](int index) override { return *myValues[index]; }
-		virtual int size() override { return myValues.size(); }
+		virtual int size() override { return static_cast<int>(myValues.size()); }
 		virtual void add(Value* value) { myValues.push_back(value); }
 		void serialize(std::ofstream& stream, int indent, bool newline) override;
 	private:

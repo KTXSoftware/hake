@@ -38,7 +38,7 @@ UUID::UUID(std::string string) {
 	int p = 0;
 	int i;
 	int cut = static_cast<int>(string.length()) - 1 - 12;
-	for (i = string.length() - 1; i > cut; --i) {
+	for (i = static_cast<int>(string.length() - 1); i > cut; --i) {
 		low += fromHex(string[i]) * (u64)pow(16.0, p);
 		++p;
 	}
