@@ -33,7 +33,7 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<movie minorVersion=\"0\" />", 2);
 		p("<movie platform=\"JavaScript\" />", 2);
 		p("<movie background=\"#FFFFFF\" />", 2);
-		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"" + haxeDirectory.toString() + "\" />", 2);
+		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"../" + haxeDirectory.toString() + "\" />", 2);
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
