@@ -146,7 +146,7 @@ namespace {
 			}
 			case Windows: {
 				if (Options::getGraphicsApi() == OpenGL || Options::getGraphicsApi() == OpenGL2) {
-					if (Files::exists(shaderPath.resolve(name + ".glsl"))) Files::copy(shaderPath.resolve(name + ".glsl"), to.resolve(name + ".glsl"), true);
+					if (kfx == "") Files::copy(shaderPath.resolve(name + ".glsl"), to.resolve(name + ".glsl"), true);
 					else compileShader(kfx, "glsl", shader, to.resolve(name + ".glsl"), temp);
 					addShader(project, name, ".glsl");
 				}
@@ -171,7 +171,7 @@ namespace {
 			}
 			case OSX:
 			case Linux: {
-				if (Files::exists(shaderPath.resolve(name + ".glsl"))) Files::copy(shaderPath.resolve(name + ".glsl"), to.resolve(name + ".glsl"), true);
+				if (kfx == "") Files::copy(shaderPath.resolve(name + ".glsl"), to.resolve(name + ".glsl"), true);
 				else compileShader(kfx, "glsl", shader, to.resolve(name + ".glsl"), temp);
 				addShader(project, name, ".glsl");
 				break;
