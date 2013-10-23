@@ -506,5 +506,33 @@ int main(int argc, char** argv) {
 
 		else if (arg == "nokhafolders") khafolders = false;
 	}
+
+	if (haxeDirectory.path == "") {
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Tools", "haxe"));
+		if (Files::isDirectory(path)) haxeDirectory = path;
+	}
+
+	if (kfx == "") {
+#ifdef SYS_WINDOWS
+		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx.exe"));
+#elif defined SYS_OSX
+		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx-osx"));
+#elif defined SYS_LINUX
+		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx-linux"));
+#endif
+		if (Files::exists(path)) kfx = path.toString();
+	}
+
+	if (oggEncoder == "") {
+#ifdef SYS_WINDOWS
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Tools", "oggenc2.exe"));
+#elif defined SYS_OSX
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Tools", "oggenc-osx"));
+#elif defined SYS_LINUX
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Tools", "oggenc-linux"));
+#endif
+		if (Files::exists(path)) oggEncoder = path.toString() + " {in} -o {out}";
+	}
+
 	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx, khafolders);
 }
