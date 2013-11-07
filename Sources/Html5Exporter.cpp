@@ -68,8 +68,8 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<!-- Other project options -->", 1);
 		p("<options>", 1);
 		p("<option showHiddenPaths=\"False\" />", 2);
-		p("<option testMovie=\"OpenDocument\" />", 2);
-		p("<option testMovieCommand=\"bin/index.html\" />", 2);
+		p("<option testMovie=\"Webserver\" />", 2);
+		p("<option testMovieCommand=\"html5/index.html\" />", 2);
 		p("</options>", 1);
 		p("<!-- Plugin storage -->", 1);
 		p("<storage />", 1);
