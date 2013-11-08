@@ -128,6 +128,22 @@ Path Paths::get(std::string a, std::string b, std::string c, std::string d) {
 	return path;
 }
 
+Path Paths::get(std::string a, std::string b, std::string c, std::string d, std::string e) {
+	Path path;
+	a = fix(a);
+	b = fix(b);
+	c = fix(c);
+	d = fix(d);
+	e = fix(e);
+	if (startsWith(b, "./")) b = b.substr(2);
+	if (startsWith(c, "./")) c = c.substr(2);
+	if (startsWith(d, "./")) d = d.substr(2);
+	if (startsWith(e, "./")) e = e.substr(2);
+	if (a == ".") path.path = concat(concat(concat(b, c), d), e);
+	else path.path = concat(concat(concat(concat(a, b), c), d), e);
+	return path;
+}
+
 #include "String.h"
 #ifdef SYS_WINDOWS
 #include <Windows.h>

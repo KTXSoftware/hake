@@ -277,7 +277,7 @@ namespace {
 		
 		std::string name = from.toAbsolutePath().getFileName();
 		
-		if (haxeDirectory.path != "" && kore && Files::exists(from.resolve("Kore"))) {
+		if (haxeDirectory.path != "" && kore) {
 			std::vector<std::string> options;
 			options.push_back("-D");
 			options.push_back("no-compilation");
@@ -332,18 +332,18 @@ namespace {
 				out << "project:addDefine(\"KORE\")\n";
 				out << "project:addDefine(\"ROTATE90\")\n";
 				if (platform == Windows) out << "project:addLib(\"ws2_32\")\n";
-				out << "project:addSubProject(Solution.createProject(\"Kore\"))\n";
+				out << "project:addSubProject(Solution.createProject(\"Kha/Kore\"))\n";
 				if (Files::exists(from.resolve("KoreVideo"))) out << "project:addSubProject(Solution.createProject(\"KoreVideo\"))\n";
 				out << "solution:addProject(project)\n";
 			}
 
 			//exportKoreProject(directory);
 #ifdef SYS_WINDOWS
-			Path kake = from.resolve(Paths::get("Kore", "Tools", "kake", "kake.exe"));
+			Path kake = from.resolve(Paths::get("Kha", "Kore", "Tools", "kake", "kake.exe"));
 #elif defined SYS_OSX
-			Path kake = from.resolve(Paths::get("Kore", "Tools", "kake", "kake-osx"));
+			Path kake = from.resolve(Paths::get("Kha", "Kore", "Tools", "kake", "kake-osx"));
 #elif defined SYS_LINUX
-			Path kake = from.resolve(Paths::get("Kore", "Tools", "kake", "kake-linux"));
+			Path kake = from.resolve(Paths::get("Kha", "Kore", "Tools", "kake", "kake-linux"));
 #endif
 			std::string platformString = "unknown";
 			switch (platform) {
@@ -514,11 +514,11 @@ int main(int argc, char** argv) {
 
 	if (kfx == "") {
 #ifdef SYS_WINDOWS
-		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx.exe"));
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Kore", "Tools", "kfx", "kfx.exe"));
 #elif defined SYS_OSX
-		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx-osx"));
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Kore", "Tools", "kfx", "kfx-osx"));
 #elif defined SYS_LINUX
-		Path path = Paths::get(from).resolve(Paths::get("Kore", "Tools", "kfx", "kfx-linux"));
+		Path path = Paths::get(from).resolve(Paths::get("Kha", "Kore", "Tools", "kfx", "kfx-linux"));
 #endif
 		if (Files::exists(path)) kfx = path.toString();
 	}
