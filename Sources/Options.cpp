@@ -45,5 +45,6 @@ void Options::setGraphicsApi(std::string api) {
 void Options::setVisualStudioVersion(std::string vs) {
 	if (vs == "vs2010") visualStudio = VS2010;
 	else if (vs == "vs2012") visualStudio = VS2012;
+	else if (vs == "vs2013") visualStudio = VS2013;
 	else std::cerr << "Unknown Visual Studio version " << vs << std::endl;
 }

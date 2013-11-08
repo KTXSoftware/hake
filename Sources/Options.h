@@ -5,7 +5,8 @@
 namespace kake {
 	enum VisualStudioVersion {
 		VS2010,
-		VS2012
+		VS2012,
+		VS2013
 	};
 
 	enum GraphicsApi {

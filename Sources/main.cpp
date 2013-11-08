@@ -418,6 +418,9 @@ namespace {
 			case VS2012:
 				vs = "vs2012";
 				break;
+			case VS2013:
+				vs = "vs2013";
+				break;
 			}
 
 			{
