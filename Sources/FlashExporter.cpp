@@ -1,6 +1,8 @@
 #include "FlashExporter.h"
 #include "Files.h"
+#include "Haxe.h"
 #include "ImageTool.h"
+#include "Options.h"
 #include "SoundTool.h"
 #include "String.h"
 #include <sstream>
@@ -26,7 +28,7 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<output>", 1);
 		p("<movie outputType=\"Application\" />", 2);
 		p("<movie input=\"\" />", 2);
-		p("<movie path=\"flash\\sml.swf\" />", 2);
+		p("<movie path=\"flash\\kha.swf\" />", 2);
 		p("<movie fps=\"60\" />", 2);
 		std::stringstream w;
 		w << "<movie width=\"" << width << "\" />";
@@ -83,6 +85,21 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Flash")).toString());
+	p("-swf " + directory.resolve(Paths::get(sysdir(), "kha.swf")).toString());
+	p("-swf-version 11.2");
+	p("-main Main");
+	closeFile();
+
+	if (Options::compilation()) {
+		std::vector<std::string> options;
+		options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+		executeHaxe(haxeDirectory, options);
+	}
 }
 
 void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {

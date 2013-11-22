@@ -8,6 +8,7 @@ namespace {
 	std::string intermediateDrive;
 	GraphicsApi gfxApi = Direct3D9;
 	VisualStudioVersion visualStudio = VS2012;
+	bool compile = true;
 }
 
 bool Options::usesPrecompiledHeaders() {
@@ -24,6 +25,10 @@ GraphicsApi Options::getGraphicsApi() {
 
 VisualStudioVersion Options::getVisualStudioVersion() {
 	return visualStudio;
+}
+
+bool Options::compilation() {
+	return compile;
 }
 
 void Options::setPrecompiledHeaders(bool value) {
@@ -47,4 +52,8 @@ void Options::setVisualStudioVersion(std::string vs) {
 	else if (vs == "vs2012") visualStudio = VS2012;
 	else if (vs == "vs2013") visualStudio = VS2013;
 	else std::cerr << "Unknown Visual Studio version " << vs << std::endl;
+}
+
+void Options::setCompilation(bool value) {
+	compile = value;
 }

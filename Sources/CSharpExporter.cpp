@@ -84,13 +84,20 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 	p("</project>");
 	closeFile();
 	
+	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
+	p("-cs " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-main Main");
+	p("-D no-root");
+	p("-D no-compilation");
+	closeFile();
+
 	std::vector<std::string> options;
-	options.push_back("-D");
-	options.push_back("no-root");
-	options.push_back("-D");
-	options.push_back("no-compilation");
-	executeHaxe(haxeDirectory, from, directory.resolve(Paths::get(sysdir() + "-build", "Sources")), backendDir(), "cs", options);
-		
+	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+	executeHaxe(haxeDirectory, options);
+	
 	UUID projectUuid = UUID::randomUUID();
 	exportSLN(projectUuid);
 	exportCsProj(projectUuid);

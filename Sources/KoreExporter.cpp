@@ -1,5 +1,6 @@
 #include "KoreExporter.h"
 #include "Files.h"
+#include "Haxe.h"
 #include "ImageTool.h"
 #include "SoundTool.h"
 
@@ -91,6 +92,19 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Kore")).toString());
+	p("-cpp " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-D no-compilation");
+	p("-main Main");
+	closeFile();
+
+	std::vector<std::string> options;
+	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+	executeHaxe(haxeDirectory, options);
 }
 	
 void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {

@@ -277,12 +277,7 @@ namespace {
 		
 		std::string name = from.toAbsolutePath().getFileName();
 		
-		if (haxeDirectory.path != "" && kore) {
-			std::vector<std::string> options;
-			options.push_back("-D");
-			options.push_back("no-compilation");
-			executeHaxe(haxeDirectory, from, to.resolve(Paths::get(exporter->sysdir() + "-build", "Sources")), "Kore", "cpp", options);
-			
+		if (haxeDirectory.path != "" && kore) {			
 			{
 				std::ofstream out(from.resolve("kake.lua").toString().c_str());
 				out << "solution = Solution.new(\"" << name << "\")\n";
@@ -508,6 +503,7 @@ int main(int argc, char** argv) {
 		else if (startsWith(arg, "to=")) to = arg.substr(3);
 
 		else if (arg == "nokhafolders") khafolders = false;
+		else if (arg == "nocompile") Options::setCompilation(false);
 	}
 
 	if (haxeDirectory.path == "") {

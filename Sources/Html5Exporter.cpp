@@ -1,6 +1,8 @@
 #include "Html5Exporter.h"
 #include "Files.h"
+#include "Haxe.h"
 #include "ImageTool.h"
+#include "Options.h"
 #include "SoundTool.h"
 #include <sstream>
 
@@ -21,61 +23,61 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");
-		p("<!-- Output SWF options -->", 1);
-		p("<output>", 1);
-		p("<movie outputType=\"Application\" />", 2);
-		p("<movie input=\"\" />", 2);
-		p("<movie path=\"html5\\JSProject.js\" />", 2);
-		p("<movie fps=\"0\" />", 2);
-		p("<movie width=\"0\" />", 2);
-		p("<movie height=\"0\" />", 2);
-		p("<movie version=\"1\" />", 2);
-		p("<movie minorVersion=\"0\" />", 2);
-		p("<movie platform=\"JavaScript\" />", 2);
-		p("<movie background=\"#FFFFFF\" />", 2);
-		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"../" + haxeDirectory.toString() + "\" />", 2);
-		p("</output>", 1);
-		p("<!-- Other classes to be compiled into your SWF -->", 1);
-		p("<classpaths>", 1);
-		p("<class path=\"..\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Backends\\HTML5\" />", 2);
-		p("</classpaths>", 1);
-		p("<!-- Build options -->", 1);
-		p("<build>", 1);
-		p("<option directives=\"\" />", 2);
-		p("<option flashStrict=\"False\" />", 2);
-		p("<option mainClass=\"Main\" />", 2);
-		p("<option enabledebug=\"False\" />", 2);
-		p("<option additional=\"\" />", 2);
-		p("</build>", 1);
-		p("<!-- haxelib libraries -->", 1);
-		p("<haxelib>", 1);
-		p("<!-- example: <library name=\"...\" /> -->", 2);
-		p("</haxelib>", 1);
-		p("<!-- Class files to compile (other referenced classes will automatically be included) -->", 1);
-		p("<compileTargets>", 1);
-		p("<compile path=\"..\\Sources\\Main.hx\" />", 2);
-		p("</compileTargets>", 1);
-		p("<!-- Paths to exclude from the Project Explorer tree -->", 1);
-		p("<hiddenPaths>", 1);
-		p("<!-- example: <hidden path=\"...\" /> -->", 2);
-		p("</hiddenPaths>", 1);
-		p("<!-- Executed before build -->", 1);
-		p("<preBuildCommand />", 1);
-		p("<!-- Executed after build -->", 1);
-		p("<postBuildCommand alwaysRun=\"False\" />", 1);
-		p("<!-- Other project options -->", 1);
-		p("<options>", 1);
-		p("<option showHiddenPaths=\"False\" />", 2);
-		p("<option testMovie=\"Webserver\" />", 2);
-		p("<option testMovieCommand=\"html5/index.html\" />", 2);
-		p("</options>", 1);
-		p("<!-- Plugin storage -->", 1);
-		p("<storage />", 1);
+	p("<!-- Output SWF options -->", 1);
+	p("<output>", 1);
+	p("<movie outputType=\"Application\" />", 2);
+	p("<movie input=\"\" />", 2);
+	p("<movie path=\"html5\\kha.js\" />", 2);
+	p("<movie fps=\"0\" />", 2);
+	p("<movie width=\"0\" />", 2);
+	p("<movie height=\"0\" />", 2);
+	p("<movie version=\"1\" />", 2);
+	p("<movie minorVersion=\"0\" />", 2);
+	p("<movie platform=\"JavaScript\" />", 2);
+	p("<movie background=\"#FFFFFF\" />", 2);
+	if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"../" + haxeDirectory.toString() + "\" />", 2);
+	p("</output>", 1);
+	p("<!-- Other classes to be compiled into your SWF -->", 1);
+	p("<classpaths>", 1);
+	p("<class path=\"..\\Sources\" />", 2);
+	p("<class path=\"..\\Kha\\Sources\" />", 2);
+	p("<class path=\"..\\Kha\\Backends\\HTML5\" />", 2);
+	p("</classpaths>", 1);
+	p("<!-- Build options -->", 1);
+	p("<build>", 1);
+	p("<option directives=\"\" />", 2);
+	p("<option flashStrict=\"False\" />", 2);
+	p("<option mainClass=\"Main\" />", 2);
+	p("<option enabledebug=\"False\" />", 2);
+	p("<option additional=\"\" />", 2);
+	p("</build>", 1);
+	p("<!-- haxelib libraries -->", 1);
+	p("<haxelib>", 1);
+	p("<!-- example: <library name=\"...\" /> -->", 2);
+	p("</haxelib>", 1);
+	p("<!-- Class files to compile (other referenced classes will automatically be included) -->", 1);
+	p("<compileTargets>", 1);
+	p("<compile path=\"..\\Sources\\Main.hx\" />", 2);
+	p("</compileTargets>", 1);
+	p("<!-- Paths to exclude from the Project Explorer tree -->", 1);
+	p("<hiddenPaths>", 1);
+	p("<!-- example: <hidden path=\"...\" /> -->", 2);
+	p("</hiddenPaths>", 1);
+	p("<!-- Executed before build -->", 1);
+	p("<preBuildCommand />", 1);
+	p("<!-- Executed after build -->", 1);
+	p("<postBuildCommand alwaysRun=\"False\" />", 1);
+	p("<!-- Other project options -->", 1);
+	p("<options>", 1);
+	p("<option showHiddenPaths=\"False\" />", 2);
+	p("<option testMovie=\"Webserver\" />", 2);
+	p("<option testMovieCommand=\"html5/index.html\" />", 2);
+	p("</options>", 1);
+	p("<!-- Plugin storage -->", 1);
+	p("<storage />", 1);
 	p("</project>");
 	closeFile();
-	
+
 	Path index = directory.resolve(Paths::get(sysdir(), "index.html"));
 	if (!Files::exists(index)) {
 		writeFile(index);
@@ -92,10 +94,24 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		p(khanvas.str(), 2);
 		p("</p>", 1);
 		p("<div id=\"haxe:trace\"></div>", 1);
-		p("<script src=\"JSProject.js\"></script>", 1);
+		p("<script src=\"kha.js\"></script>", 1);
 		p("</body>");
 		p("</html>");
 		closeFile();
+	}
+
+	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "HTML5")).toString());
+	p("-js " + directory.resolve(Paths::get(sysdir(), "kha.js")).toString());
+	p("-main Main");
+	closeFile();
+
+	if (Options::compilation()) {
+		std::vector<std::string> options;
+		options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+		executeHaxe(haxeDirectory, options);
 	}
 }
 

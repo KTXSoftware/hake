@@ -21,10 +21,12 @@ namespace kake {
 		std::string getIntermediateDrive();
 		GraphicsApi getGraphicsApi();
 		VisualStudioVersion getVisualStudioVersion();
+		bool compilation();
 
 		void setPrecompiledHeaders(bool value);
 		void setIntermediateDrive(std::string drive);
 		void setGraphicsApi(std::string api);
 		void setVisualStudioVersion(std::string vs);
+		void setCompilation(bool value);
 	}
 }
