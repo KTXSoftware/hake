@@ -16,6 +16,7 @@ namespace kake {
 		XNA,
 		Java,
 		PlayStationMobile,
-		Dalvik
+		Dalvik,
+		Tizen
 	};
 }

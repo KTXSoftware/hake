@@ -138,6 +138,7 @@ namespace {
 			}
 			case HTML5:
 			case Android:
+			case Tizen:
 			case iOS: {
 				if (Files::exists(shaderPath.resolve(name + ".essl"))) Files::copy(shaderPath.resolve(name + ".essl"), to.resolve(name + ".essl"), true);
 				else compileShader(kfx, "essl", shader, to.resolve(name + ".essl"), temp);
@@ -354,6 +355,9 @@ namespace {
 			case PlayStation3:
 				platformString = "ps3";
 				break;
+			case Tizen:
+				platformString = "tizen";
+				break;
 			case Android:
 				platformString = "android";
 				break;
@@ -488,6 +492,7 @@ int main(int argc, char** argv) {
 		else if (arg == "java") platform = Java;
 		else if (arg == "psm") platform = PlayStationMobile;
 		else if (arg == "dalvik") platform = Dalvik;
+		else if (arg == "tizen") platform = Tizen;
 
 		else if (arg == "pch") Options::setPrecompiledHeaders(true);
 		else if (startsWith(arg, "intermediate=")) Options::setIntermediateDrive(arg.substr(13));
