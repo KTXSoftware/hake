@@ -1,0 +1,4 @@
+[submodule "kmdlib"]
+	path = kmdlib
+	url = ../kmdlib
+	branch = master
