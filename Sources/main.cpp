@@ -321,6 +321,7 @@ namespace {
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
 				if (platform == OSX) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"osx\\\"\")\n";
 				if (platform == iOS) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"ios\\\"\")\n";
+				out << "project:addDefine(\"HXCPP_SCRIPTABLE\")\n";
 				out << "project:addDefine(\"STATIC_LINK\")\n";
 				out << "project:addDefine(\"PCRE_STATIC\")\n";
 				out << "project:addDefine(\"HXCPP_SET_PROP\")\n";
