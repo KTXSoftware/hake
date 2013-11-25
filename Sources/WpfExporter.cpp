@@ -1,7 +1,7 @@
 #include "WpfExporter.h"
 #include "Files.h"
 #include "SoundTool.h"
-#include "String.h"
+#include "StringHelper.h"
 
 using namespace hake;
 using namespace kake;

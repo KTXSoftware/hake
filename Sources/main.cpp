@@ -6,7 +6,7 @@
 #include "Path.h"
 #include "Platform.h"
 #include "Random.h"
-#include "String.h"
+#include "StringHelper.h"
 #include "DalvikExporter.h"
 #include "FlashExporter.h"
 #include "Html5Exporter.h"

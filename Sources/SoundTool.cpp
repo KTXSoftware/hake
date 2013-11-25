@@ -1,6 +1,6 @@
 #include "SoundTool.h"
 #include "Execute.h"
-#include "String.h"
+#include "StringHelper.h"
 
 using namespace hake;
 using namespace kake;

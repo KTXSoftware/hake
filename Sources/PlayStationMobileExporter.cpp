@@ -1,6 +1,6 @@
 #include "PlayStationMobileExporter.h"
 #include "ImageTool.h"
-#include "String.h"
+#include "StringHelper.h"
 
 using namespace hake;
 using namespace kake;

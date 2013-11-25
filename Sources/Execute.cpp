@@ -1,5 +1,5 @@
 #include "Execute.h"
-#include "String.h"
+#include "StringHelper.h"
 
 #ifdef SYS_WINDOWS
 #include <Windows.h>
