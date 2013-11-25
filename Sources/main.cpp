@@ -223,7 +223,7 @@ namespace {
 		Files::createDirectories(to.resolve(exporter->sysdir()));
 		
 		if (Files::exists(from.resolve("project.kha"))) {
-			Kore::FileReader reader(from.resolve("project.kha").toString().c_str());
+			kmd::FileReader reader(from.resolve("project.kha").toString().c_str());
 			char* content = (char*)reader.readAll();
 			char* text = new char[reader.size() + 1];
 			for (int i = 0; i < reader.size(); ++i) text[i] = content[i];
