@@ -310,6 +310,8 @@ namespace {
 					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcretest.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/ExampleMain.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/Scriptable.cpp\", "
+					<< "\"Kha/Backends/kxcpp/src/hx/Cppia.cpp\", "
+					<< "\"Kha/Backends/kxcpp/src/hx/CppiaBuiltin.cpp\", "
 					<< "\"**/src/__main__.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/NekoAPI.cpp\")\n";
 				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"" + replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString(), '\\', '/') + "/Sources/include\", "
@@ -321,7 +323,7 @@ namespace {
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
 				if (platform == OSX) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"osx\\\"\")\n";
 				if (platform == iOS) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"ios\\\"\")\n";
-				out << "project:addDefine(\"HXCPP_SCRIPTABLE\")\n";
+				//out << "project:addDefine(\"HXCPP_SCRIPTABLE\")\n";
 				out << "project:addDefine(\"STATIC_LINK\")\n";
 				out << "project:addDefine(\"PCRE_STATIC\")\n";
 				out << "project:addDefine(\"HXCPP_SET_PROP\")\n";

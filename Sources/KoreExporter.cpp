@@ -111,24 +111,20 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 	
 void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	if (platform == Android)  convertSound(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".ogg"), oggEncoder);
-	else if (platform == Tizen)  convertSound(from, directory.resolve(Paths::get(sysdir(), "data")).resolve(to.toString() + ".ogg"), oggEncoder);
 	else convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
 }
 
 void KoreExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".wav"));
-	else if (platform == Tizen) copyFile(from, directory.resolve(Paths::get(sysdir(), "data")).resolve(to.toString() + ".wav"));
 	else copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
 }
 
 void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
 	if (platform == Android) exportImage(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to), asset);
-	else if (platform == Tizen) exportImage(from, directory.resolve(Paths::get(sysdir(), "data")).resolve(to), asset);
 	else exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
 	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to));
-	else if (platform == Tizen) copyFile(from, directory.resolve(Paths::get(sysdir(), "data")).resolve(to));
 	else copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
