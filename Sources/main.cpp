@@ -292,7 +292,7 @@ namespace {
 				files.push_back("Kha/Backends/kxcpp/runtime/libs/std/**.cpp");
 				//"Kha/Backends/kxcpp/runtime/libs/zlib/**.cpp"
 				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.h");
-				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.c");
 				//"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cc"
 				files.push_back("Kha/Backends/Kore/*.cpp");
 				files.push_back("Kha/Backends/Kore/*.h");
@@ -304,10 +304,10 @@ namespace {
 					out << ", \"" + files[i] + "\"";
 				}
 				out << ")\n";
-				out << "project:addExcludes(\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/dftables.cpp\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcredemo.cpp\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcregrep.cpp\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcretest.cpp\", "
+				out << "project:addExcludes(\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/dftables.c\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcredemo.c\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcregrep.c\", "
+					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcretest.c\", "
 					<< "\"Kha/Backends/kxcpp/src/ExampleMain.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/Scriptable.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/Cppia.cpp\", "
