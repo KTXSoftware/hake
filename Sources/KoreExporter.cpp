@@ -35,7 +35,7 @@ std::string KoreExporter::sysdir() {
 		return "kore";
 	}
 }
-	
+
 void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
@@ -108,23 +108,19 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
 	executeHaxe(haxeDirectory, options);
 }
-	
+
 void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	if (platform == Android)  convertSound(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".ogg"), oggEncoder);
-	else convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
 }
 
 void KoreExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to.toString() + ".wav"));
-	else copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
+	copyFile(from, directory.resolve(sysdir()).resolve(to.toString() + ".wav"));
 }
 
 void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	if (platform == Android) exportImage(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to), asset);
-	else exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
 void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
-	if (platform == Android) copyFile(from, directory.resolve(Paths::get(sysdir(), "assets")).resolve(to));
-	else copyFile(from, directory.resolve(sysdir()).resolve(to));
+	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
