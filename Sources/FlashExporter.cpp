@@ -37,7 +37,7 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 		h << "<movie height=\"" << height << "\" />";
 		p(h.str(), 2);
 		p("<movie version=\"11\" />", 2);
-		p("<movie minorVersion=\"2\" />", 2);
+		p("<movie minorVersion=\"6\" />", 2);
 		p("<movie platform=\"Flash Player\" />", 2);
 		p("<movie background=\"#FFFFFF\" />", 2);
 		if (Files::isDirectory(haxeDirectory)) p("<movie preferredSDK=\"../" + haxeDirectory.toString() + "\" />", 2);
@@ -91,7 +91,7 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
 	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Flash")).toString());
 	p("-swf " + directory.resolve(Paths::get(sysdir(), "kha.swf")).toString());
-	p("-swf-version 11.2");
+	p("-swf-version 11.6");
 	p("-main Main");
 	closeFile();
 
