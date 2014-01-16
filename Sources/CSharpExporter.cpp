@@ -56,6 +56,7 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 		p("<option mainClass=\"Main\" />", 2);
 		p("<option enabledebug=\"False\" />", 2);
 		p("<option additional=\"-D no-root&#xA;-D no-compilation\" />", 2);
+		p("<option additional=\"-D no-root&#xA;-D no-compilation&#xA;-net-std ../" + haxeDirectory.resolve("netlib").toString() + "\" />", 2);
 		p("</build>", 1);
 		p("<!-- haxelib libraries -->", 1);
 		p("<haxelib>", 1);
@@ -83,15 +84,18 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
+
+	Path netlib = directory.resolve(sysdir()).relativize(haxeDirectory.resolve("netlib"));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
+	p("-cp ../" + from.resolve("Sources").toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
 	p("-cs " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
 	p("-main Main");
 	p("-D no-root");
 	p("-D no-compilation");
+	p("-net-std ../" + netlib.toString());
 	closeFile();
 
 	std::vector<std::string> options;

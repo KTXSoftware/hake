@@ -101,9 +101,9 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 	}
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "HTML5")).toString());
+	p("-cp ../" + from.resolve("Sources").toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", "HTML5")).toString());
 	p("-js " + directory.resolve(Paths::get(sysdir(), "kha.js")).toString());
 	p("-main Main");
 	closeFile();

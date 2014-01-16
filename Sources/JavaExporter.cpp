@@ -46,7 +46,7 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 		p("<option flashStrict=\"False\" />", 2);
 		p("<option mainClass=\"Main\" />", 2);
 		p("<option enabledebug=\"False\" />", 2);
-		p("<option additional=\"-D no-compilation&#xA;-java-lib " + haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")).toString() + "\" />", 2);
+		p("<option additional=\"-D no-compilation&#xA;-java-lib ../" + haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")).toString() + "\" />", 2);
 		p("</build>", 1);
 		p("<!-- haxelib libraries -->", 1);
 		p("<haxelib>", 1);
@@ -78,13 +78,13 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 	Path javalib = directory.resolve(sysdir()).relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backend())).toString());
+	p("-cp ../" + from.resolve("Sources").toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", backend())).toString());
 	p("-java " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
 	p("-main Main");
 	p("-D no-compilation");
-	p("-java-lib " + javalib.toString());
+	p("-java-lib ../" + javalib.toString());
 	closeFile();
 
 	std::vector<std::string> options;
