@@ -101,7 +101,7 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 	p("-cp " + from.resolve("Sources").toString());
 	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
 	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Kore")).toString());
-	p("-cpp ../" + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-cpp " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
 	p("-D no-compilation");
 	p("-main Main");
 	closeFile();
