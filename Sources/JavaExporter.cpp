@@ -74,17 +74,15 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
-		
-	Path javalib = directory.resolve(sysdir()).relativize(haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp ../" + from.resolve("Sources").toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", backend())).toString());
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backend())).toString());
 	p("-java " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
 	p("-main Main");
 	p("-D no-compilation");
-	p("-java-lib ../" + javalib.toString());
+	p("-java-lib ../" + haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")).toString());
 	closeFile();
 
 	std::vector<std::string> options;

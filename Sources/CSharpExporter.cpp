@@ -85,17 +85,15 @@ void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDire
 	p("</project>");
 	closeFile();
 
-	Path netlib = directory.resolve(sysdir()).relativize(haxeDirectory.resolve("netlib"));
-	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp ../" + from.resolve("Sources").toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
 	p("-cs " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
 	p("-main Main");
 	p("-D no-root");
 	p("-D no-compilation");
-	p("-net-std ../" + netlib.toString());
+	p("-net-std " + haxeDirectory.resolve("netlib").toString());
 	closeFile();
 
 	std::vector<std::string> options;

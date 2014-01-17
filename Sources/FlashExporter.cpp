@@ -87,9 +87,9 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 	closeFile();
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp ../" + from.resolve("Sources").toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp ../" + from.resolve(Paths::get("Kha", "Backends", "Flash")).toString());
+	p("-cp " + from.resolve("Sources").toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Flash")).toString());
 	p("-swf " + directory.resolve(Paths::get(sysdir(), "kha.swf")).toString());
 	p("-swf-version 11.6");
 	p("-main Main");
