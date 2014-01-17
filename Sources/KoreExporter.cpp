@@ -95,6 +95,8 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 	p("</project>");
 	closeFile();
 
+	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
+
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
 	p("-cp " + from.resolve("Sources").toString());
 	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());

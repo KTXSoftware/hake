@@ -74,6 +74,8 @@ void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirect
 		p("<storage />", 1);
 	p("</project>");
 	closeFile();
+
+	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
 	p("-cp " + from.resolve("Sources").toString());
