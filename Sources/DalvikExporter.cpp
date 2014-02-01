@@ -1,7 +1,9 @@
 #include "DalvikExporter.h"
 #include "Ball.h"
+#include "Converter.h"
+#include "Exporter.h"
+#include "Files.h"
 #include "ImageTool.h"
-#include "SoundTool.h"
 
 using namespace hake;
 using namespace kake;
@@ -171,7 +173,8 @@ void DalvikExporter::exportEclipseProject() {
 }
 
 void DalvikExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve(Paths::get(sysdir(), "assets", to.toString() + ".ogg")), oggEncoder);
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(Paths::get(sysdir(), "assets", to.toString() + ".ogg")), oggEncoder);
 }
 
 void DalvikExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {

@@ -1,11 +1,11 @@
-#include "SoundTool.h"
+#include "Converter.h"
 #include "Execute.h"
 #include "StringHelper.h"
 
 using namespace hake;
 using namespace kake;
 
-void hake::convertSound(Path inFilename, Path outFilename, std::string encoder) {
+void hake::convert(Path inFilename, Path outFilename, std::string encoder) {
 	if (encoder == "") return;
 	//std::string cmd = replace(replace(encoder, "{in}", "\"" + inFilename.toString()) + "\"", "{out}", "\"" + outFilename.toString() + "\"");
 	auto parts = split(encoder, ' ');

@@ -183,7 +183,7 @@ namespace {
 		}
 	}
 
-	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx, bool khafolders) {
+	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders) {
 		std::cout << "Generating Kha project." << std::endl;
 		
 		Files::createDirectories(to);
@@ -259,12 +259,10 @@ namespace {
 					exporter->copyBlob(platform, file, Paths::get(asset["file"].string()));
 				}
 				else if (asset["type"].string() == "video") {
-					for (auto ext : exporter->videoExtensions()) {
-						Path file;
-						if (khafolders) file = from.resolve(Paths::get("Assets", "Videos", asset["file"].string() + "." + ext));
-						else file = from.resolve(asset["file"].string() + "." + ext);
-						exporter->copyBlob(platform, file, Paths::get(asset["file"].string() + "." + ext));
-					}
+					Path file;
+					if (khafolders) file = from.resolve(Paths::get("Assets", "Sound", asset["file"].string()));
+					else file = from.resolve(asset["file"].string());
+					exporter->copyVideo(platform, file, Paths::get(asset["file"].string()), h264Encoder, webmEncoder, wmvEncoder);
 				}
 			}
 			
@@ -447,9 +445,9 @@ namespace {
 		return Files::exists(directory.resolve("Kha")) || Files::exists(directory.resolve("project.kha"));
 	}
 
-	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string kfx, bool khafolders) {
+	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders) {
 		if (isKhaProject(from)) {
-			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx, khafolders);
+			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders);
 		}
 		else {
 			std::cerr << "Kha directory not found." << std::endl;
@@ -475,6 +473,9 @@ int main(int argc, char** argv) {
 	std::string oggEncoder;
 	std::string aacEncoder;
 	std::string mp3Encoder;
+	std::string h264Encoder;
+	std::string webmEncoder;
+	std::string wmvEncoder;
 	std::string kfx;
 	bool khafolders = true;
 
@@ -505,6 +506,9 @@ int main(int argc, char** argv) {
 		else if (startsWith(arg, "ogg=")) oggEncoder = arg.substr(4);
 		else if (startsWith(arg, "aac=")) aacEncoder = arg.substr(4);
 		else if (startsWith(arg, "mp3=")) mp3Encoder = arg.substr(4);
+		else if (startsWith(arg, "h264=")) h264Encoder = arg.substr(5);
+		else if (startsWith(arg, "webm=")) webmEncoder = arg.substr(5);
+		else if (startsWith(arg, "wmv=")) wmvEncoder = arg.substr(4);
 		else if (startsWith(arg, "kfx=")) kfx = arg.substr(4);
 
 		else if (startsWith(arg, "from=")) from = arg.substr(5);
@@ -541,5 +545,5 @@ int main(int argc, char** argv) {
 		if (Files::exists(path)) oggEncoder = path.toString() + " {in} -o {out}";
 	}
 
-	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, kfx, khafolders);
+	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders);
 }

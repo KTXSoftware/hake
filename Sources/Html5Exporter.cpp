@@ -1,9 +1,9 @@
 #include "Html5Exporter.h"
+#include "Converter.h"
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
 #include "Options.h"
-#include "SoundTool.h"
 #include <sstream>
 
 using namespace hake;
@@ -116,13 +116,15 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 }
 
 void Html5Exporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
 void Html5Exporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
 void Html5Exporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
@@ -133,9 +135,8 @@ void Html5Exporter::copyBlob(kake::Platform platform, kake::Path from, kake::Pat
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
 
-std::vector<std::string> Html5Exporter::videoExtensions() {
-	std::vector<std::string> extensions;
-	extensions.push_back("mp4");
-	extensions.push_back("webm");
-	return extensions;
+void Html5Exporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), h264Encoder);
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".webm"), webmEncoder);
 }

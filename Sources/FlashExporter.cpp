@@ -1,9 +1,9 @@
 #include "FlashExporter.h"
+#include "Converter.h"
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
 #include "Options.h"
-#include "SoundTool.h"
 #include "String.h"
 #include <sstream>
 
@@ -104,12 +104,12 @@ void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 
 void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
 void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
 }
 
 void FlashExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
@@ -120,8 +120,7 @@ void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
 
-std::vector<std::string> FlashExporter::videoExtensions() {
-	std::vector<std::string> extensions;
-	extensions.push_back("mp4");
-	return extensions;
+void FlashExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), h264Encoder);
 }

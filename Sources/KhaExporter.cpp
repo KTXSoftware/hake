@@ -36,9 +36,5 @@ void KhaExporter::setWidthAndHeight(int width, int height) {
 void KhaExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) { }
 void KhaExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
 void KhaExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) { }
+void KhaExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) { }
 void KhaExporter::copyBlob(Platform platform, Path from, Path to) { }
-
-std::vector<std::string> KhaExporter::videoExtensions() {
-	std::vector<std::string> extensions;
-	return extensions;
-}

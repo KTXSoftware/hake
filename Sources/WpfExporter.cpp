@@ -1,6 +1,6 @@
 #include "WpfExporter.h"
+#include "Converter.h"
 #include "Files.h"
-#include "SoundTool.h"
 #include "StringHelper.h"
 
 using namespace hake;
@@ -274,11 +274,11 @@ void WpfExporter::copySound(Platform platform, Path from, Path to, std::string o
 }
 
 void WpfExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
-std::vector<std::string> WpfExporter::videoExtensions() {
-	std::vector<std::string> extensions;
-	extensions.push_back("wmv");
-	return extensions;
+void WpfExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) {
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".wmv"), wmvEncoder);
 }

@@ -1,8 +1,8 @@
 #include "KoreExporter.h"
+#include "Converter.h"
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
-#include "SoundTool.h"
 
 using namespace hake;
 using namespace kake;
@@ -112,7 +112,8 @@ void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path fr
 }
 
 void KoreExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
-	convertSound(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
+	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
+	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".ogg"), oggEncoder);
 }
 
 void KoreExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
@@ -125,4 +126,8 @@ void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value&
 
 void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
+}
+
+void KoreExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+	
 }
