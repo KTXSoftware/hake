@@ -36,7 +36,7 @@ std::string KoreExporter::sysdir() {
 	}
 }
 
-void KoreExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+void KoreExporter::exportSolution(std::string name, Platform platform, Path haxeDirectory, Path from) {
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
 	p("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 	p("<project version=\"2\">");

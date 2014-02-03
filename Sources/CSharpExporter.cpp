@@ -22,7 +22,7 @@ void CSharpExporter::includeFiles(Path dir, Path baseDir) {
 	}
 }
 
-void CSharpExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory, kake::Path from) {
+void CSharpExporter::exportSolution(std::string name, kake::Platform platform, kake::Path haxeDirectory, kake::Path from) {
 	createDirectory(directory.resolve(sysdir()));
 	createDirectory(directory.resolve(sysdir() + "-build"));
 

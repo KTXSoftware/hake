@@ -18,7 +18,7 @@ std::string FlashExporter::sysdir() {
 	return "flash";
 }
 
-void FlashExporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+void FlashExporter::exportSolution(std::string name, Platform platform, Path haxeDirectory, Path from) {
 	createDirectory(directory.resolve(sysdir()));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));

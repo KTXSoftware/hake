@@ -1,13 +1,22 @@
 #include "Html5Exporter.h"
 #include "Converter.h"
+#include "FileReader.h"
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
 #include "Options.h"
+#include "StringHelper.h"
 #include <sstream>
 
 using namespace hake;
 using namespace kake;
+
+namespace {
+	std::string readFile(std::string filename) {
+		kmd::FileReader reader(filename.c_str());
+		return std::string((char*)reader.readAll(), reader.size());
+	}
+}
 
 Html5Exporter::Html5Exporter(Path directory) : directory(directory) {
 	
@@ -17,7 +26,7 @@ std::string Html5Exporter::sysdir() {
 	return "html5";
 }
 
-void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path from) {
+void Html5Exporter::exportSolution(std::string name, Platform platform, Path haxeDirectory, Path from) {
 	createDirectory(directory.resolve(sysdir()));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
@@ -80,23 +89,17 @@ void Html5Exporter::exportSolution(Platform platform, Path haxeDirectory, Path f
 
 	Path index = directory.resolve(Paths::get(sysdir(), "index.html"));
 	if (!Files::exists(index)) {
+
+		std::string protoindex = readFile(Paths::executableDir().resolve(Paths::get("Data", "html5", "index.html")).toString());
 		writeFile(index);
-		p("<!DOCTYPE html>");
-		p("<html>");
-		p("<head>");
-		p("<meta charset=\"utf-8\"/>", 1);
-		p("<title>Kha</title>", 1);
-		p("</head>");
-		p("<body>");
-		p("<p align=\"center\">", 1);
-		std::stringstream khanvas;
-		khanvas << "<canvas id=\"khanvas\" width=\"" << width << "\" height=\"" << height << "\" style=\"outline: none;\"></canvas>";
-		p(khanvas.str(), 2);
-		p("</p>", 1);
-		p("<div id=\"haxe:trace\"></div>", 1);
-		p("<script src=\"kha.js\"></script>", 1);
-		p("</body>");
-		p("</html>");
+		protoindex = replace(protoindex, "{Name}", name);
+		std::stringstream w;
+		w << width;
+		protoindex = replace(protoindex, "{Width}", w.str());
+		std::stringstream h;
+		h << height;
+		protoindex = replace(protoindex, "{Height}", h.str());
+		out->write(protoindex.c_str(), protoindex.size());
 		closeFile();
 	}
 

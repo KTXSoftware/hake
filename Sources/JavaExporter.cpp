@@ -14,7 +14,7 @@ std::string JavaExporter::sysdir() {
 	return "java";
 }
 
-void JavaExporter::exportSolution(kake::Platform platform, kake::Path haxeDirectory, Path from) {
+void JavaExporter::exportSolution(std::string name, kake::Platform platform, kake::Path haxeDirectory, Path from) {
 	createDirectory(directory.resolve(sysdir()));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));

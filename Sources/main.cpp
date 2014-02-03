@@ -222,6 +222,7 @@ namespace {
 
 		Files::createDirectories(to.resolve(exporter->sysdir()));
 		
+		std::string name;
 		if (Files::exists(from.resolve("project.kha"))) {
 			kmd::FileReader reader(from.resolve("project.kha").toString().c_str());
 			char* content = (char*)reader.readAll();
@@ -230,6 +231,7 @@ namespace {
 			text[reader.size()] = 0;
 			Json::Data project(text);
 
+			name = project["game"]["name"].string();
 			exporter->setWidthAndHeight(project["game"]["width"].number(), project["game"]["height"].number());
 
 			for (int i = 0; i < project["assets"].size(); ++i) {
@@ -272,10 +274,11 @@ namespace {
 			project.save(temp.resolve("project.kha"));
 			exporter->copyBlob(platform, temp.resolve("project.kha"), Paths::get("project.kha"));
 		}
-		if (haxeDirectory.path != "") exporter->exportSolution(platform, haxeDirectory, from);
-		
-		std::string name = from.toAbsolutePath().getFileName();
-		
+
+		if (name == "") name = from.toAbsolutePath().getFileName();
+
+		if (haxeDirectory.path != "") exporter->exportSolution(name, platform, haxeDirectory, from);
+				
 		if (haxeDirectory.path != "" && kore) {			
 			{
 				std::ofstream out(from.resolve("kake.lua").toString().c_str());
