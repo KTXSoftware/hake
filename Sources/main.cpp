@@ -262,7 +262,7 @@ namespace {
 				}
 				else if (asset["type"].string() == "video") {
 					Path file;
-					if (khafolders) file = from.resolve(Paths::get("Assets", "Sound", asset["file"].string()));
+					if (khafolders) file = from.resolve(Paths::get("Assets", "Video", asset["file"].string()));
 					else file = from.resolve(asset["file"].string());
 					exporter->copyVideo(platform, file, Paths::get(asset["file"].string()), h264Encoder, webmEncoder, wmvEncoder);
 				}
