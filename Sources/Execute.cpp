@@ -25,7 +25,7 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 	for (int i = 0; i < 2000; ++i) environment[i] = 0;
 	strcpy(environment, env.c_str());
 	for (auto arg : arguments) command += " \"" + arg + "\"";
-	CreateProcessA(nullptr, (char*)command.c_str(), nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, environment, nullptr, &startupInfo, &processInfo);
+	CreateProcessA(nullptr, (char*)command.c_str(), nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, env == "" ? nullptr : environment, nullptr, &startupInfo, &processInfo);
 	WaitForSingleObject(processInfo.hProcess, INFINITE);
 	CloseHandle(processInfo.hProcess);
 	CloseHandle(processInfo.hThread);
