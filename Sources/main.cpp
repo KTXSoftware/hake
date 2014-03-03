@@ -322,6 +322,7 @@ namespace {
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
 				if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
+				if (platform == Android) out << "project:addDefine(\"ANDROID\")\n";
 				if (platform == OSX) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"osx\\\"\")\n";
 				if (platform == iOS) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"ios\\\"\")\n";
 				//out << "project:addDefine(\"HXCPP_SCRIPTABLE\")\n";
