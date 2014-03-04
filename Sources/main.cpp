@@ -323,7 +323,11 @@ namespace {
 				out << "project:setDebugDir(\"" + replace(to.resolve(Paths::get(exporter->sysdir())).toString(), '\\', '/') + "\")\n";
 				if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
-				if (platform == OSX) out << "project:addDefine(\"HXCPP_M64\")\n";
+				if (platform == OSX) {
+					out << "project:addDefine(\"HXCPP_M64\")\n";
+					out << "project:addDefine(\"HX_MACOS\")\n";
+				}
+				if (platform == Linux) out << "project:addDefine(\"HX_LINUX\")\n";
 				if (platform == iOS) out << "project:addDefine(\"IPHONE\")\n";
 				if (platform == Android) out << "project:addDefine(\"ANDROID\")\n";
 				if (platform == OSX) out << "project:addDefine(\"KORE_DEBUGDIR=\\\"osx\\\"\")\n";
