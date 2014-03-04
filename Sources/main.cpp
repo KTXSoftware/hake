@@ -288,13 +288,16 @@ namespace {
 				files.push_back("Kha/Backends/kxcpp/src/**.h");
 				files.push_back("Kha/Backends/kxcpp/src/**.cpp");
 				files.push_back("Kha/Backends/kxcpp/include/**.h");
-				//"Kha/Backends/kxcpp/runtime/libs/nekoapi/**.cpp"
-				files.push_back("Kha/Backends/kxcpp/runtime/libs/regexp/**.cpp");
-				files.push_back("Kha/Backends/kxcpp/runtime/libs/std/**.cpp");
-				//"Kha/Backends/kxcpp/runtime/libs/zlib/**.cpp"
-				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.h");
-				files.push_back("Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.c");
-				//"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/**.cc"
+				//"Kha/Backends/kxcpp/project/libs/nekoapi/**.cpp"
+				files.push_back("Kha/Backends/kxcpp/project/libs/common/**.cpp");
+				if (platform == Windows) files.push_back("Kha/Backends/kxcpp/project/libs/msvccompat/**.cpp");
+				if (platform == Linux) files.push_back("Kha/Backends/kxcpp/project/libs/linuxcompat/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/project/libs/regexp/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/project/libs/std/**.cpp");
+				//"Kha/Backends/kxcpp/project/libs/zlib/**.cpp"
+				files.push_back("Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/**.h");
+				files.push_back("Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/**.c");
+				//"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/**.cc"
 				files.push_back("Kha/Backends/Kore/*.cpp");
 				files.push_back("Kha/Backends/Kore/*.h");
 				files.push_back(replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString() + "/Sources/**.h", '\\', '/'));
@@ -305,10 +308,10 @@ namespace {
 					out << ", \"" + files[i] + "\"";
 				}
 				out << ")\n";
-				out << "project:addExcludes(\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/dftables.c\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcredemo.c\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcregrep.c\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8/pcretest.c\", "
+				out << "project:addExcludes(\"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/dftables.c\", "
+					<< "\"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/pcredemo.c\", "
+					<< "\"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/pcregrep.c\", "
+					<< "\"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/pcretest.c\", "
 					<< "\"Kha/Backends/kxcpp/src/ExampleMain.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/Scriptable.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/Cppia.cpp\", "
@@ -316,7 +319,7 @@ namespace {
 					<< "\"**/src/__main__.cpp\", "
 					<< "\"Kha/Backends/kxcpp/src/hx/NekoAPI.cpp\")\n";
 				out << "project:addIncludeDirs(\"Kha/Backends/kxcpp/include\", \"" + replace(to.resolve(Paths::get(exporter->sysdir() + "-build")).toString(), '\\', '/') + "/Sources/include\", "
-					<< "\"Kha/Backends/kxcpp/runtime/thirdparty/pcre-7.8\", \"Kha/Backends/kxcpp/runtime/libs/nekoapi\");\n";
+					<< "\"Kha/Backends/kxcpp/project/thirdparty/pcre-7.8\", \"Kha/Backends/kxcpp/project/libs/nekoapi\");\n";
 				out << "project:setDebugDir(\"" + replace(to.resolve(Paths::get(exporter->sysdir())).toString(), '\\', '/') + "\")\n";
 				if (platform == Windows) out << "project:addDefine(\"HX_WINDOWS\")\n";
 				if (platform == WindowsRT) out << "project:addDefine(\"HX_WINRT\")\n";
