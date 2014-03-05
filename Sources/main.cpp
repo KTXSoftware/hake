@@ -289,10 +289,13 @@ namespace {
 				files.push_back("Kha/Backends/kxcpp/src/**.cpp");
 				files.push_back("Kha/Backends/kxcpp/include/**.h");
 				//"Kha/Backends/kxcpp/project/libs/nekoapi/**.cpp"
+				files.push_back("Kha/Backends/kxcpp/project/libs/common/**.h");
 				files.push_back("Kha/Backends/kxcpp/project/libs/common/**.cpp");
 				if (platform == Windows) files.push_back("Kha/Backends/kxcpp/project/libs/msvccompat/**.cpp");
 				if (platform == Linux) files.push_back("Kha/Backends/kxcpp/project/libs/linuxcompat/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/project/libs/regexp/**.h");
 				files.push_back("Kha/Backends/kxcpp/project/libs/regexp/**.cpp");
+				files.push_back("Kha/Backends/kxcpp/project/libs/std/**.h");
 				files.push_back("Kha/Backends/kxcpp/project/libs/std/**.cpp");
 				//"Kha/Backends/kxcpp/project/libs/zlib/**.cpp"
 				files.push_back("Kha/Backends/kxcpp/project/thirdparty/pcre-7.8/**.h");
