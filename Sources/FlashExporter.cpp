@@ -151,6 +151,7 @@ void FlashExporter::exportSolution(std::string name, Platform platform, Path hax
 void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
+	if (embed) sounds.push_back(to.toString() + ".mp3");
 }
 
 void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
