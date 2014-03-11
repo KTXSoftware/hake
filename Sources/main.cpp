@@ -183,7 +183,7 @@ namespace {
 		}
 	}
 
-	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders) {
+	std::string exportKhaProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders, bool embedflashassets) {
 		std::cout << "Generating Kha project." << std::endl;
 		
 		Files::createDirectories(to);
@@ -194,7 +194,7 @@ namespace {
 		bool kore = false;
 		switch (platform) {
 		case Flash:
-			exporter = new FlashExporter(to);
+			exporter = new FlashExporter(to, embedflashassets);
 			break;
 		case HTML5:
 			exporter = new Html5Exporter(to);
@@ -459,9 +459,9 @@ namespace {
 		return Files::exists(directory.resolve("Kha")) || Files::exists(directory.resolve("project.kha"));
 	}
 
-	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders) {
+	std::string exportProject(Path from, Path to, Platform platform, Path haxeDirectory, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder, std::string kfx, bool khafolders, bool embedflashassets) {
 		if (isKhaProject(from)) {
-			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders);
+			return exportKhaProject(from, to, platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders, embedflashassets);
 		}
 		else {
 			std::cerr << "Kha directory not found." << std::endl;
@@ -492,6 +492,7 @@ int main(int argc, char** argv) {
 	std::string wmvEncoder;
 	std::string kfx;
 	bool khafolders = true;
+	bool embedflashassets = false;
 
 	for (int i = 1; i < argc; ++i) {
 		std::string arg(argv[i]);
@@ -529,6 +530,7 @@ int main(int argc, char** argv) {
 		else if (startsWith(arg, "to=")) to = arg.substr(3);
 
 		else if (arg == "nokhafolders") khafolders = false;
+		else if (arg == "embedflashassets") embedflashassets = true;
 		else if (arg == "nocompile") Options::setCompilation(false);
 	}
 
@@ -559,5 +561,5 @@ int main(int argc, char** argv) {
 		if (Files::exists(path)) oggEncoder = path.toString() + " {in} -o {out}";
 	}
 
-	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders);
+	exportProject(Paths::get(from), Paths::get(to), platform, haxeDirectory, oggEncoder, aacEncoder, mp3Encoder, h264Encoder, webmEncoder, wmvEncoder, kfx, khafolders, embedflashassets);
 }

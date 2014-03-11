@@ -55,7 +55,6 @@ void CSharpExporter::exportSolution(std::string name, kake::Platform platform, k
 		p("<option flashStrict=\"False\" />", 2);
 		p("<option mainClass=\"Main\" />", 2);
 		p("<option enabledebug=\"False\" />", 2);
-		p("<option additional=\"-D no-root&#xA;-D no-compilation\" />", 2);
 		p("<option additional=\"-D no-root&#xA;-D no-compilation&#xA;-net-std ../" + haxeDirectory.resolve("netlib").toString() + "\" />", 2);
 		p("</build>", 1);
 		p("<!-- haxelib libraries -->", 1);
@@ -88,18 +87,18 @@ void CSharpExporter::exportSolution(std::string name, kake::Platform platform, k
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backendDir())).toString());
-	p("-cs " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", backendDir())).toString());
+	p("-cs " + Paths::get(sysdir() + "-build", "Sources").toString());
 	p("-main Main");
 	p("-D no-root");
 	p("-D no-compilation");
-	p("-net-std " + haxeDirectory.resolve("netlib").toString());
+	p("-net-std ../" + haxeDirectory.resolve("netlib").toString());
 	closeFile();
 
 	std::vector<std::string> options;
-	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+	options.push_back("project-" + sysdir() + ".hxml");
 	executeHaxe(haxeDirectory, options);
 	
 	UUID projectUuid = UUID::randomUUID();

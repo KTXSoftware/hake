@@ -78,17 +78,17 @@ void JavaExporter::exportSolution(std::string name, kake::Platform platform, kak
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", backend())).toString());
-	p("-java " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", backend())).toString());
+	p("-java " + Paths::get(sysdir() + "-build", "Sources").toString());
 	p("-main Main");
 	p("-D no-compilation");
 	p("-java-lib ../" + haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")).toString());
 	closeFile();
 
 	std::vector<std::string> options;
-	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+	options.push_back("project-" + sysdir() + ".hxml");
 	executeHaxe(haxeDirectory, options);
 
 	exportEclipseProject();

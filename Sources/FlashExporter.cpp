@@ -4,13 +4,21 @@
 #include "Haxe.h"
 #include "ImageTool.h"
 #include "Options.h"
-#include "String.h"
+#include "StringHelper.h"
 #include <sstream>
 
 using namespace hake;
 using namespace kake;
 
-FlashExporter::FlashExporter(kake::Path directory) : directory(directory) {
+namespace {
+	std::string adjustFilename(std::string filename) {
+		filename = replace(filename, '.', '_');
+		filename = replace(filename, '-', '_');
+		return filename;
+	}
+}
+
+FlashExporter::FlashExporter(kake::Path directory, bool embedflashassets) : directory(directory), embed(embedflashassets) {
 	
 }
 
@@ -54,7 +62,8 @@ void FlashExporter::exportSolution(std::string name, Platform platform, Path hax
 		p("<option flashStrict=\"False\" />", 2);
 		p("<option mainClass=\"Main\" />", 2);
 		p("<option enabledebug=\"True\" />", 2);
-		p("<option additional=\"\" />", 2);
+		if (embed) p("<option additional=\"-D KHA_EMBEDDED_ASSETS\" />", 2);
+		else p("<option additional=\"\" />", 2);
 		p("</build>", 1);
 		p("<!-- haxelib libraries -->", 1);
 		p("<haxelib>", 1);
@@ -87,17 +96,54 @@ void FlashExporter::exportSolution(std::string name, Platform platform, Path hax
 	closeFile();
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Flash")).toString());
-	p("-swf " + directory.resolve(Paths::get(sysdir(), "kha.swf")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "Flash")).toString());
+	if (embed) p("-D KHA_EMBEDDED_ASSETS");
+	p("-swf " + Paths::get(sysdir(), "kha.swf").toString());
 	p("-swf-version 11.6");
 	p("-main Main");
 	closeFile();
 
+	if (embed) {
+		writeFile(directory.resolve(Paths::get("..", "Sources", "Assets.hx")));
+		
+		p("package;");
+		p();
+		p("import flash.display.BitmapData;");
+		p("import flash.media.Sound;");
+		p("import flash.utils.ByteArray;");
+		p();
+
+		for (std::string image : images) {
+			p("@:bitmap(\"flash/" + image + "\") class Assets_" + adjustFilename(image) + " extends BitmapData { }");
+		}
+		
+		p();
+
+		for (std::string sound : sounds) {
+			p("@:sound(\"flash/" + sound + "\") class Assets_" + adjustFilename(sound) + " extends Sound { }");
+		}
+
+		p();
+
+		for (std::string blob : blobs) {
+			p("@:file(\"flash/" + blob + "\") class Assets_" + adjustFilename(blob) + " extends ByteArray { }");
+		}
+
+		p();
+		p("class Assets {");
+		p("public static function visit(): Void {", 1);
+		p("", 2);
+		p("}", 1);
+		p("}");
+		
+		closeFile();
+	}
+
 	if (Options::compilation()) {
 		std::vector<std::string> options;
-		options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+		options.push_back("project-" + sysdir() + ".hxml");
 		executeHaxe(haxeDirectory, options);
 	}
 }
@@ -110,14 +156,17 @@ void FlashExporter::copyMusic(Platform platform, Path from, Path to, std::string
 void FlashExporter::copySound(Platform platform, Path from, Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp3"), mp3Encoder);
+	if (embed) sounds.push_back(to.toString() + ".mp3");
 }
 
 void FlashExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
 	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
+	if (embed) images.push_back(to.toString());
 }
 
 void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
+	if (embed) blobs.push_back(to.toString());
 }
 
 void FlashExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {

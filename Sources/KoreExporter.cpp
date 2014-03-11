@@ -98,16 +98,16 @@ void KoreExporter::exportSolution(std::string name, Platform platform, Path haxe
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "Kore")).toString());
-	p("-cpp " + directory.resolve(Paths::get(sysdir() + "-build", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "Kore")).toString());
+	p("-cpp " + Paths::get(sysdir() + "-build", "Sources").toString());
 	p("-D no-compilation");
 	p("-main Main");
 	closeFile();
 
 	std::vector<std::string> options;
-	options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+	options.push_back("project-" + sysdir() + ".hxml");
 	executeHaxe(haxeDirectory, options);
 }
 

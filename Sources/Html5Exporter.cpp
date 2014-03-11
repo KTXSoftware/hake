@@ -104,16 +104,16 @@ void Html5Exporter::exportSolution(std::string name, Platform platform, Path hax
 	}
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve("Sources").toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("Kha", "Backends", "HTML5")).toString());
-	p("-js " + directory.resolve(Paths::get(sysdir(), "kha.js")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
+	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "HTML5")).toString());
+	p("-js " + Paths::get(sysdir(), "kha.js").toString());
 	p("-main Main");
 	closeFile();
 
 	if (Options::compilation()) {
 		std::vector<std::string> options;
-		options.push_back(directory.resolve("project-" + sysdir() + ".hxml").toString());
+		options.push_back("project-" + sysdir() + ".hxml");
 		executeHaxe(haxeDirectory, options);
 	}
 }

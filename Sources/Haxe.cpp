@@ -11,5 +11,5 @@ void hake::executeHaxe(Path haxeDirectory, std::vector<std::string> options) {
 #elif defined SYS_LINUX
 	Path exe = haxeDirectory.resolve("haxe-linux");
 #endif
-	executeSync(exe.toString(), options, std::string("HAXE_STD_PATH=") + haxeDirectory.resolve("std").toString());
+	executeSync(exe.toString(), options, std::string("HAXE_STD_PATH=../") + haxeDirectory.resolve("std").toString(), "build");
 }

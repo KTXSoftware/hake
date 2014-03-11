@@ -13,7 +13,7 @@
 #include <sys/wait.h>
 #endif
 
-void hake::executeSync(std::string command, std::vector<std::string> arguments, std::string env) {
+void hake::executeSync(std::string command, std::vector<std::string> arguments, std::string env, std::string currentDirectory) {
 #ifdef SYS_WINDOWS
 	STARTUPINFOA startupInfo;
 	PROCESS_INFORMATION processInfo;
@@ -24,8 +24,12 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 	char* environment = new char[2000];
 	for (int i = 0; i < 2000; ++i) environment[i] = 0;
 	strcpy(environment, env.c_str());
+	currentDirectory = replace(currentDirectory, '/', '\\');
+	char* currentDir = new char[2000];
+	for (int i = 0; i < 2000; ++i) currentDir[i] = 0;
+	strcpy(currentDir, currentDirectory.c_str());
 	for (auto arg : arguments) command += " \"" + arg + "\"";
-	CreateProcessA(nullptr, (char*)command.c_str(), nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, env == "" ? nullptr : environment, nullptr, &startupInfo, &processInfo);
+	CreateProcessA(nullptr, (char*)command.c_str(), nullptr, nullptr, FALSE, CREATE_DEFAULT_ERROR_MODE, env == "" ? nullptr : environment, currentDirectory == "" ? nullptr : currentDir, &startupInfo, &processInfo);
 	WaitForSingleObject(processInfo.hProcess, INFINITE);
 	CloseHandle(processInfo.hProcess);
 	CloseHandle(processInfo.hThread);
