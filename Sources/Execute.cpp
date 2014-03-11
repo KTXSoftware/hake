@@ -70,6 +70,14 @@ void hake::executeSync(std::string command, std::vector<std::string> arguments, 
 		strcpy(environment, env.c_str());
 		char* const envarray[] = {environment, 0};
 
+		if (currentDirectory != "")
+		{
+			char* curDir = new char[2000];
+			for (int i = 0; i < 2000; ++i) curDir[i] = 0;
+			strcpy(curDir, currentDirectory.c_str());
+			chdir(curDir);
+		}
+		
 		execve(cmd, argv, envarray);
 		_exit(127);
 	}
