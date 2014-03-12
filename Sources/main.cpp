@@ -122,7 +122,7 @@ namespace {
 		project["shaders"].add(s);
 	}
 
-	void addShaders(Platform platform, Json::Data& project, Path to, Path temp, Path shaderPath, std::string kfx) {
+	void addShaders(KhaExporter* exporter, Platform platform, Json::Data& project, Path to, Path temp, Path shaderPath, std::string kfx) {
 		if (!Files::isDirectory(shaderPath)) return;
 		auto shaders = Files::newDirectoryStream(shaderPath);
 		for (Path shader : shaders) {
@@ -134,6 +134,7 @@ namespace {
 				if (Files::exists(shaderPath.resolve(name + ".agal"))) Files::copy(shaderPath.resolve(name + ".agal"), to.resolve(name + ".agal"), true);
 				else compileShader(kfx, "agal", shader, to.resolve(name + ".agal"), temp);
 				addShader(project, name, ".agal");
+				exporter->addShader(name + ".agal");
 				break;
 			}
 			case HTML5:
@@ -268,8 +269,8 @@ namespace {
 				}
 			}
 			
-			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
-			addShaders(platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Kha", "Sources", "Shaders")), kfx);
+			addShaders(exporter, platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
+			addShaders(exporter, platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Kha", "Sources", "Shaders")), kfx);
 			
 			project.save(temp.resolve("project.kha"));
 			exporter->copyBlob(platform, temp.resolve("project.kha"), Paths::get("project.kha"));

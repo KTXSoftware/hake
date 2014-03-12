@@ -16,6 +16,7 @@ namespace hake {
 		void copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) override;
 		void copyImage(kake::Platform platform, kake::Path from, kake::Path to, Json::Value& asset) override;
 		void copyBlob(kake::Platform platform, kake::Path from, kake::Path to) override;
+		void addShader(std::string shader) override;
 	private:
 		kake::Path directory;
 		bool embed;

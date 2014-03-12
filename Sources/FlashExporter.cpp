@@ -174,3 +174,7 @@ void FlashExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Pa
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), h264Encoder);
 }
+
+void FlashExporter::addShader(std::string shader) {
+	if (embed) blobs.push_back(shader);
+}
