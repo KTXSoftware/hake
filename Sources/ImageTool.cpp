@@ -53,7 +53,6 @@ namespace {
 }
 
 void hake::exportImage(Path from, Path to, Json::Value& asset, bool premultiplyAlpha) {
-	premultiplyAlpha = false;
 	if (!Files::exists(to.parent())) Files::createDirectories(to.parent());
 	if (!premultiplyAlpha && (!asset.has("scale") || asset["scale"].number() == 1 || asset["scale"].number() == 0) && !asset.has("background")) KhaExporter::copyFile(from, to);
 	else {
@@ -66,10 +65,10 @@ void hake::exportImage(Path from, Path to, Json::Value& asset, bool premultiplyA
 		if (premultiplyAlpha) {
 			for (int y = 0; y < h; ++y) {
 				for (int x = 0; x < w; ++x) {
-					float alpha = image[y * w * 4 + h * 4 + 3] / 255.0f;
-					image[y * w * 4 + h * 4 + 0] = k_round(image[y * w * 4 + h * 4 + 0] * alpha);
-					image[y * w * 4 + h * 4 + 1] = k_round(image[y * w * 4 + h * 4 + 1] * alpha);
-					image[y * w * 4 + h * 4 + 2] = k_round(image[y * w * 4 + h * 4 + 2] * alpha);
+					float alpha = image[y * w * 4 + x * 4 + 3] / 255.0f;
+					image[y * w * 4 + x * 4 + 0] = k_round(image[y * w * 4 + x * 4 + 0] * alpha);
+					image[y * w * 4 + x * 4 + 1] = k_round(image[y * w * 4 + x * 4 + 1] * alpha);
+					image[y * w * 4 + x * 4 + 2] = k_round(image[y * w * 4 + x * 4 + 2] * alpha);
 				}
 			}
 		}
