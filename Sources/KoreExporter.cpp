@@ -121,7 +121,7 @@ void KoreExporter::copySound(Platform platform, Path from, Path to, std::string 
 }
 
 void KoreExporter::copyImage(Platform platform, Path from, Path to, Json::Value& asset) {
-	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
+	exportImage(from, directory.resolve(sysdir()).resolve(to), asset, true);
 }
 
 void KoreExporter::copyBlob(Platform platform, Path from, Path to) {

@@ -52,15 +52,27 @@ namespace {
 	}
 }
 
-void hake::exportImage(Path from, Path to, Json::Value& asset) {
+void hake::exportImage(Path from, Path to, Json::Value& asset, bool premultiplyAlpha) {
 	if (!Files::exists(to.parent())) Files::createDirectories(to.parent());
-	if ((!asset.has("scale") || asset["scale"].number() == 1 || asset["scale"].number() == 0) && !asset.has("background")) KhaExporter::copyFile(from, to);
+	if (!premultiplyAlpha && (!asset.has("scale") || asset["scale"].number() == 1 || asset["scale"].number() == 0) && !asset.has("background")) KhaExporter::copyFile(from, to);
 	else {
 		int w;
 		int h;
 		int comp;
 		u8* image = stbi_load(from.toString().c_str(), &w, &h, &comp, 4);
 		if (image == nullptr) throw std::runtime_error("Could not read image.");
+
+		if (premultiplyAlpha) {
+			for (int y = 0; y < h; ++y) {
+				for (int x = 0; x < w; ++x) {
+					float alpha = image[y * w * 4 + h * 4 + 3] / 255.0f;
+					image[y * w * 4 + h * 4 + 0] = ::round(image[y * w * 4 + h * 4 + 0] * alpha);
+					image[y * w * 4 + h * 4 + 1] = ::round(image[y * w * 4 + h * 4 + 1] * alpha);
+					image[y * w * 4 + h * 4 + 2] = ::round(image[y * w * 4 + h * 4 + 2] * alpha);
+				}
+			}
+		}
+
 		if (asset.has("scale") && asset["scale"].number() != 0 && asset["scale"].number() != 1) {
 			image = (u8*)scale((u32*)image, w, h, w * asset["scale"].number(), h * asset["scale"].number());
 			w *= asset["scale"].number();
