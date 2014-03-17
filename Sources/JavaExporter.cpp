@@ -24,7 +24,7 @@ void JavaExporter::exportSolution(std::string name, kake::Platform platform, kak
 		p("<output>", 1);
 		p("<movie outputType=\"Application\" />", 2);
 		p("<movie input=\"\" />", 2);
-		p("<movie path=\"" + sysdir() + "-build\\Sources\" />", 2);
+		p("<movie path=\"" + sysdir() + "\\Sources\" />", 2);
 		p("<movie fps=\"0\" />", 2);
 		p("<movie width=\"0\" />", 2);
 		p("<movie height=\"0\" />", 2);
@@ -75,13 +75,13 @@ void JavaExporter::exportSolution(std::string name, kake::Platform platform, kak
 	p("</project>");
 	closeFile();
 
-	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
+	Files::removeDirectory(directory.resolve(Paths::get(sysdir(), "Sources")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
 	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
 	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
 	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", backend())).toString());
-	p("-java " + Paths::get(sysdir() + "-build", "Sources").toString());
+	p("-java " + Paths::get(sysdir(), "Sources").toString());
 	p("-main Main");
 	p("-D no-compilation");
 	p("-java-lib ../" + haxeDirectory.resolve(Paths::get("hxjava", "hxjava-std.jar")).toString());
