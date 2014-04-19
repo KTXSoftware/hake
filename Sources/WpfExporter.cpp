@@ -3,6 +3,7 @@
 #include "Files.h"
 #include "StringHelper.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -278,7 +279,7 @@ void WpfExporter::copyMusic(Platform platform, Path from, Path to, std::string o
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), aacEncoder);
 }
 
-void WpfExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) {
+void WpfExporter::copyVideo(kake::Platform platform, kmd::Path from, kmd::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".wmv"), wmvEncoder);
 }

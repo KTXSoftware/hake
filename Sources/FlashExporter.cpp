@@ -7,6 +7,7 @@
 #include "StringHelper.h"
 #include <sstream>
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -18,7 +19,7 @@ namespace {
 	}
 }
 
-FlashExporter::FlashExporter(kake::Path directory, bool embedflashassets) : directory(directory), embed(embedflashassets) {
+FlashExporter::FlashExporter(kmd::Path directory, bool embedflashassets) : directory(directory), embed(embedflashassets) {
 	
 }
 
@@ -170,7 +171,7 @@ void FlashExporter::copyBlob(Platform platform, Path from, Path to) {
 	if (embed) blobs.push_back(to.toString());
 }
 
-void FlashExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+void FlashExporter::copyVideo(kake::Platform platform, kmd::Path from, kmd::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), h264Encoder);
 }

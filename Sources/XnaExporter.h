@@ -5,9 +5,9 @@
 namespace hake {
 	class XnaExporter : public CSharpExporter {
 	public:
-		XnaExporter(kake::Path directory);
+		XnaExporter(kmd::Path directory);
 		std::string sysdir() override;
-		void copyImage(kake::Platform platform, kake::Path from, kake::Path to, Json::Value& asset) override;
+		void copyImage(kake::Platform platform, kmd::Path from, kmd::Path to, Json::Value& asset) override;
 	protected:
 		void exportResources();
 		std::string backendDir() override;

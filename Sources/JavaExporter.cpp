@@ -3,6 +3,7 @@
 #include "Haxe.h"
 #include "ImageTool.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -14,7 +15,7 @@ std::string JavaExporter::sysdir() {
 	return "java";
 }
 
-void JavaExporter::exportSolution(std::string name, kake::Platform platform, kake::Path haxeDirectory, Path from) {
+void JavaExporter::exportSolution(std::string name, kake::Platform platform, kmd::Path haxeDirectory, Path from) {
 	createDirectory(directory.resolve(sysdir()));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));

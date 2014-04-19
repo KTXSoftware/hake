@@ -2,7 +2,7 @@
 
 using namespace kake;
 
-void Exporter::writeFile(Path file) {
+void Exporter::writeFile(kmd::Path file) {
 	out = new std::ofstream(file.toString().c_str());
 }
 	

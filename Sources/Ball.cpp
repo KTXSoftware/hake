@@ -2,6 +2,7 @@
 #include "Files.h"
 #include <vector>
 
+using namespace kmd;
 using namespace kake;
 
 namespace {

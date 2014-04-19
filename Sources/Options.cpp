@@ -7,7 +7,7 @@ namespace {
 	bool precompiledHeaders = false;
 	std::string intermediateDrive;
 	GraphicsApi gfxApi = Direct3D9;
-	VisualStudioVersion visualStudio = VS2012;
+	VisualStudioVersion visualStudio = VS2013;
 	bool compile = true;
 }
 

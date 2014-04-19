@@ -3,5 +3,5 @@
 #include "Path.h"
 
 namespace hake {
-	void convert(kake::Path inFilename, kake::Path outFilename, std::string encoder);
+	void convert(kmd::Path inFilename, kmd::Path outFilename, std::string encoder);
 }

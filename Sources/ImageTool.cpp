@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 
+using namespace kmd;
 using namespace kake;
 
 namespace {

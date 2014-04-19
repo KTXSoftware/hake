@@ -4,6 +4,7 @@
 #include "Haxe.h"
 #include "ImageTool.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -128,6 +129,6 @@ void KoreExporter::copyBlob(Platform platform, Path from, Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
 
-void KoreExporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+void KoreExporter::copyVideo(kake::Platform platform, kmd::Path from, kmd::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
 	
 }

@@ -13,6 +13,8 @@
 #include <sys/wait.h>
 #endif
 
+using namespace kmd;
+
 void hake::executeSync(std::string command, std::vector<std::string> arguments, std::string env, std::string currentDirectory) {
 #ifdef SYS_WINDOWS
 	STARTUPINFOA startupInfo;

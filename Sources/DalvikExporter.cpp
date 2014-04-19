@@ -5,6 +5,7 @@
 #include "Files.h"
 #include "ImageTool.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 

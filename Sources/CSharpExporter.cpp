@@ -4,6 +4,7 @@
 #include "ImageTool.h"
 #include "StringHelper.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -22,7 +23,7 @@ void CSharpExporter::includeFiles(Path dir, Path baseDir) {
 	}
 }
 
-void CSharpExporter::exportSolution(std::string name, kake::Platform platform, kake::Path haxeDirectory, kake::Path from) {
+void CSharpExporter::exportSolution(std::string name, kake::Platform platform, kmd::Path haxeDirectory, kmd::Path from) {
 	createDirectory(directory.resolve(sysdir()));
 	createDirectory(directory.resolve(sysdir() + "-build"));
 

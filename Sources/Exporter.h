@@ -9,9 +9,9 @@ namespace kake {
 
 	class Exporter {
 	public:
-		virtual void exportSolution(std::string name, Platform platform, Path haxeDirectory, Path from) = 0;
+		virtual void exportSolution(std::string name, Platform platform, kmd::Path haxeDirectory, kmd::Path from) = 0;
 	protected:
-		void writeFile(Path file);
+		void writeFile(kmd::Path file);
 		void closeFile();
 		void p();
 		void p(std::string line);

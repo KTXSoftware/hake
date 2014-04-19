@@ -8,6 +8,7 @@
 #include "StringHelper.h"
 #include <sstream>
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 
@@ -134,11 +135,11 @@ void Html5Exporter::copyImage(Platform platform, Path from, Path to, Json::Value
 	exportImage(from, directory.resolve(sysdir()).resolve(to), asset);
 }
 
-void Html5Exporter::copyBlob(kake::Platform platform, kake::Path from, kake::Path to) {
+void Html5Exporter::copyBlob(kake::Platform platform, kmd::Path from, kmd::Path to) {
 	copyFile(from, directory.resolve(sysdir()).resolve(to));
 }
 
-void Html5Exporter::copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
+void Html5Exporter::copyVideo(kake::Platform platform, kmd::Path from, kmd::Path to, std::string h264Encoder, std::string webmEncoder, std::string wmvEncoder) {
 	Files::createDirectories(directory.resolve(sysdir()).resolve(to.toString()).parent());
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".mp4"), h264Encoder);
 	convert(from, directory.resolve(sysdir()).resolve(to.toString() + ".webm"), webmEncoder);

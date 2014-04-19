@@ -5,14 +5,14 @@
 namespace hake {
 	class WpfExporter : public CSharpExporter {
 	public:
-		WpfExporter(kake::Path directory);
+		WpfExporter(kmd::Path directory);
 		std::string sysdir() override;
 	protected:
 		void exportResources();
 		std::string backendDir() override;
 		void exportCsProj(kake::UUID projectUuid) override;
-		void copySound(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
-		void copyMusic(kake::Platform platform, kake::Path from, kake::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
-		void copyVideo(kake::Platform platform, kake::Path from, kake::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) override;
+		void copySound(kake::Platform platform, kmd::Path from, kmd::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
+		void copyMusic(kake::Platform platform, kmd::Path from, kmd::Path to, std::string oggEncoder, std::string aacEncoder, std::string mp3Encoder) override;
+		void copyVideo(kake::Platform platform, kmd::Path from, kmd::Path to, std::string mp4Encoder, std::string webmEncoder, std::string wmvEncoder) override;
 	};
 }

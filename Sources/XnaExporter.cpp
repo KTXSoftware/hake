@@ -3,6 +3,7 @@
 #include "ImageTool.h"
 #include "StringHelper.h"
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 

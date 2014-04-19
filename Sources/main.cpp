@@ -33,6 +33,7 @@
 #include <Windows.h>
 #endif
 
+using namespace kmd;
 using namespace hake;
 using namespace kake;
 

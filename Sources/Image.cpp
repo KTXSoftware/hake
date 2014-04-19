@@ -6,6 +6,7 @@
 #include <cmath>
 #include <fstream>
 
+using namespace kmd;
 using namespace kake;
 
 Image::Image(int x, int y, unsigned* data) : x(x), y(y), data(data) {

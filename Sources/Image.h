@@ -7,7 +7,7 @@ namespace kake {
 	class Image {
 	public:
 		Image(byte* data, int size);
-		Image(Path path);
+		Image(kmd::Path path);
 		int width();
 		int height();
 		Image* scale(int width, int height);
@@ -21,7 +21,7 @@ namespace kake {
 		byte g(int x, int y);
 		byte b(int x, int y);
 		byte a(int x, int y);
-		void save(Path path);
+		void save(kmd::Path path);
 		void save(ByteStream& stream);
 	private:
 		Image(int x, int y, unsigned* data);
