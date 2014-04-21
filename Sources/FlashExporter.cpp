@@ -15,6 +15,7 @@ namespace {
 	std::string adjustFilename(std::string filename) {
 		filename = replace(filename, '.', '_');
 		filename = replace(filename, '-', '_');
+		filename = replace(filename, '/', '_');
 		return filename;
 	}
 }
