@@ -1,10 +1,19 @@
 #include "PlayStationMobileExporter.h"
+#include <FileReader.h>
+#include <Files.h>
 #include "ImageTool.h"
 #include "StringHelper.h"
 
 using namespace kmd;
 using namespace hake;
 using namespace kake;
+
+namespace {
+	std::string readFile(std::string filename) {
+		kmd::FileReader reader(filename.c_str());
+		return std::string((char*)reader.readAll(), reader.size());
+	}
+}
 
 PlayStationMobileExporter::PlayStationMobileExporter(Path directory) : CSharpExporter(directory) {
 
@@ -88,6 +97,14 @@ void PlayStationMobileExporter::exportResources() {
 		<< "\tv_Position = mul(a_Position, WorldViewProj);\n"
 		<< "\tv_TexCoord  = a_TexCoord;\n"
 		<< "}\n";
+
+	Path appxml = directory.resolve(Paths::get(sysdir() + "-build", "app.xml"));
+	if (!Files::exists(appxml)) {
+		std::string appxmltext = readFile(Paths::executableDir().resolve(Paths::get("Data", "psm", "app.xml")).toString());
+		writeFile(appxml);
+		out->write(appxmltext.c_str(), appxmltext.size());
+		closeFile();
+	}
 }
 
 void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {
@@ -130,7 +147,7 @@ void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {
 			p("<Reference Include=\"Sce.PlayStation.Core\" />", 2);
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
-			includeFiles(directory.resolve(Paths::get(sysdir() + "-build", "Sources", "src")), directory.resolve(sysdir()));
+			includeFiles(directory.resolve(Paths::get(sysdir() + "-build", "Sources", "src")), directory.resolve(sysdir() + "-build"));
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			p("<ShaderProgram Include=\"shaders\\Simple.fcg\" />", 2);
@@ -143,7 +160,7 @@ void PlayStationMobileExporter::exportCsProj(UUID projectUuid) {
 		p("</ItemGroup>", 1);
 		p("<ItemGroup>", 1);
 			for (Path file : files) {
-				p("<Content Include=\"bin\\" + file.toString() + "\">", 2);
+				p("<Content Include=\"..\\" + sysdir() + "\\" + file.toString() + "\">", 2);
 					p("<Link>resources\\" + file.toString() + "</Link>", 3);
 				p("</Content>", 2);
 			}
