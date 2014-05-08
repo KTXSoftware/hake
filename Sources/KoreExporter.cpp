@@ -3,13 +3,14 @@
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
+#include "StringHelper.h"
 
 using namespace kmd;
 using namespace hake;
 using namespace kake;
 
 KoreExporter::KoreExporter(Platform platform, Path directory) : directory(directory), platform(platform) {
-	
+	addSourceDirectory("Kha/Backends/Kore");
 }
 
 std::string KoreExporter::sysdir() {
@@ -57,9 +58,9 @@ void KoreExporter::exportSolution(std::string name, Platform platform, Path haxe
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
-		p("<class path=\"..\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Backends\\Kore\" />", 2);
+		for (unsigned i = 0; i < sources.size(); ++i) {
+			p("<class path=\"..\\" + replace(sources[i], '/', '\\') + "\" />", 2);
+		}
 		p("</classpaths>", 1);
 		p("<!-- Build options -->", 1);
 		p("<build>", 1);
@@ -99,9 +100,9 @@ void KoreExporter::exportSolution(std::string name, Platform platform, Path haxe
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "Kore")).toString());
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("-cp " + from.resolve(Paths::get("../", sources[i])).toString());
+	}
 	p("-cpp " + Paths::get(sysdir() + "-build", "Sources").toString());
 	p("-D no-compilation");
 	p("-main Main");

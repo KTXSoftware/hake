@@ -21,7 +21,7 @@ namespace {
 }
 
 FlashExporter::FlashExporter(kmd::Path directory, bool embedflashassets) : directory(directory), embed(embedflashassets) {
-	
+	addSourceDirectory("Kha/Backends/Flash");
 }
 
 std::string FlashExporter::sysdir() {
@@ -54,9 +54,9 @@ void FlashExporter::exportSolution(std::string name, Platform platform, Path hax
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
-		p("<class path=\"..\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Backends\\Flash\" />", 2);
+		for (unsigned i = 0; i < sources.size(); ++i) {
+			p("<class path=\"..\\" + replace(sources[i], '/', '\\') + "\" />", 2);
+		}
 		p("</classpaths>", 1);
 		p("<!-- Build options -->", 1);
 		p("<build>", 1);
@@ -98,9 +98,9 @@ void FlashExporter::exportSolution(std::string name, Platform platform, Path hax
 	closeFile();
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "Flash")).toString());
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("-cp " + from.resolve(Paths::get("../", sources[i])).toString());
+	}
 	if (embed) p("-D KHA_EMBEDDED_ASSETS");
 	p("-swf " + Paths::get(sysdir(), "kha.swf").toString());
 	p("-swf-version 11.6");

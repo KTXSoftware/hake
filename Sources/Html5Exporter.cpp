@@ -20,7 +20,7 @@ namespace {
 }
 
 Html5Exporter::Html5Exporter(Path directory) : directory(directory) {
-	
+	addSourceDirectory("Kha/Backends/HTML5");
 }
 
 std::string Html5Exporter::sysdir() {
@@ -49,9 +49,9 @@ void Html5Exporter::exportSolution(std::string name, Platform platform, Path hax
 	p("</output>", 1);
 	p("<!-- Other classes to be compiled into your SWF -->", 1);
 	p("<classpaths>", 1);
-	p("<class path=\"..\\Sources\" />", 2);
-	p("<class path=\"..\\Kha\\Sources\" />", 2);
-	p("<class path=\"..\\Kha\\Backends\\HTML5\" />", 2);
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("<class path=\"..\\" + replace(sources[i], '/', '\\') + "\" />", 2);
+	}
 	p("</classpaths>", 1);
 	p("<!-- Build options -->", 1);
 	p("<build>", 1);
@@ -105,9 +105,9 @@ void Html5Exporter::exportSolution(std::string name, Platform platform, Path hax
 	}
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", "HTML5")).toString());
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("-cp " + from.resolve(Paths::get("../", sources[i])).toString());
+	}
 	p("-js " + Paths::get(sysdir(), "kha.js").toString());
 	p("-main Main");
 	closeFile();

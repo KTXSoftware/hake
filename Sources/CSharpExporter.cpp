@@ -24,6 +24,8 @@ void CSharpExporter::includeFiles(Path dir, Path baseDir) {
 }
 
 void CSharpExporter::exportSolution(std::string name, kake::Platform platform, kmd::Path haxeDirectory, kmd::Path from) {
+	addSourceDirectory("Kha/Backends/" + backendDir());
+
 	createDirectory(directory.resolve(sysdir()));
 	createDirectory(directory.resolve(sysdir() + "-build"));
 
@@ -46,9 +48,9 @@ void CSharpExporter::exportSolution(std::string name, kake::Platform platform, k
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
-		p("<class path=\"..\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Backends\\" + backendDir() + "\" />", 2);
+		for (unsigned i = 0; i < sources.size(); ++i) {
+			p("<class path=\"..\\" + replace(sources[i], '/', '\\') + "\" />", 2);
+		}
 		p("</classpaths>", 1);
 		p("<!-- Build options -->", 1);
 		p("<build>", 1);
@@ -88,9 +90,9 @@ void CSharpExporter::exportSolution(std::string name, kake::Platform platform, k
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir() + "-build", "Sources")));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", backendDir())).toString());
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("-cp " + from.resolve(Paths::get("../", sources[i])).toString());
+	}
 	p("-cs " + Paths::get(sysdir() + "-build", "Sources").toString());
 	p("-main Main");
 	p("-D no-root");

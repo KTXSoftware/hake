@@ -6,7 +6,8 @@ using namespace hake;
 using namespace kake;
 
 KhaExporter::KhaExporter() : width(640), height(480) {
-
+	addSourceDirectory("Sources");
+	addSourceDirectory("Kha/Sources");
 }
 
 std::string KhaExporter::getCurrentDirectoryName(kmd::Path directory) {

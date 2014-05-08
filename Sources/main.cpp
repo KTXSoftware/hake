@@ -225,6 +225,7 @@ namespace {
 		Files::createDirectories(to.resolve(exporter->sysdir()));
 		
 		std::string name;
+		std::vector<std::string> sources;
 		if (Files::exists(from.resolve("project.kha"))) {
 			kmd::FileReader reader(from.resolve("project.kha").toString().c_str());
 			char* content = (char*)reader.readAll();
@@ -235,6 +236,12 @@ namespace {
 
 			name = project["game"]["name"].string();
 			exporter->setWidthAndHeight(project["game"]["width"].number(), project["game"]["height"].number());
+
+			if (project.has("sources")) {
+				for (int i = 0; i < project["sources"].size(); ++i) {
+					sources.push_back(project["sources"][i].string());
+				}
+			}
 
 			for (int i = 0; i < project["assets"].size(); ++i) {
 				Json::Value& asset = project["assets"][i];
@@ -272,6 +279,10 @@ namespace {
 			
 			addShaders(exporter, platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Sources", "Shaders")), kfx);
 			addShaders(exporter, platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(Paths::get("Kha", "Sources", "Shaders")), kfx);
+			for (unsigned i = 0; i < sources.size(); ++i) {
+				addShaders(exporter, platform, project, to.resolve(exporter->sysdir()), temp, from.resolve(sources[i]), kfx);
+				exporter->addSourceDirectory(sources[i]);
+			}
 			
 			project.save(temp.resolve("project.kha"));
 			exporter->copyBlob(platform, temp.resolve("project.kha"), Paths::get("project.kha"));

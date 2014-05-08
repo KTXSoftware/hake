@@ -2,6 +2,7 @@
 #include "Files.h"
 #include "Haxe.h"
 #include "ImageTool.h"
+#include "StringHelper.h"
 
 using namespace kmd;
 using namespace hake;
@@ -16,6 +17,8 @@ std::string JavaExporter::sysdir() {
 }
 
 void JavaExporter::exportSolution(std::string name, kake::Platform platform, kmd::Path haxeDirectory, Path from) {
+	addSourceDirectory("Kha/Backends/" + backend());
+
 	createDirectory(directory.resolve(sysdir()));
 
 	writeFile(directory.resolve("project-" + sysdir() + ".hxproj"));
@@ -37,9 +40,9 @@ void JavaExporter::exportSolution(std::string name, kake::Platform platform, kmd
 		p("</output>", 1);
 		p("<!-- Other classes to be compiled into your SWF -->", 1);
 		p("<classpaths>", 1);
-		p("<class path=\"..\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Sources\" />", 2);
-		p("<class path=\"..\\Kha\\Backends\\" + backend() + "\" />", 2);
+		for (unsigned i = 0; i < sources.size(); ++i) {
+			p("<class path=\"..\\" + replace(sources[i], '/', '\\') + "\" />", 2);
+		}
 		p("</classpaths>", 1);
 		p("<!-- Build options -->", 1);
 		p("<build>", 1);
@@ -79,9 +82,9 @@ void JavaExporter::exportSolution(std::string name, kake::Platform platform, kmd
 	Files::removeDirectory(directory.resolve(Paths::get(sysdir(), "Sources")));
 	
 	writeFile(directory.resolve("project-" + sysdir() + ".hxml"));
-	p("-cp " + from.resolve(Paths::get("../", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Sources")).toString());
-	p("-cp " + from.resolve(Paths::get("../", "Kha", "Backends", backend())).toString());
+	for (unsigned i = 0; i < sources.size(); ++i) {
+		p("-cp " + from.resolve(Paths::get("../", sources[i])).toString());
+	}
 	p("-java " + Paths::get(sysdir(), "Sources").toString());
 	p("-main Main");
 	p("-D no-compilation");
