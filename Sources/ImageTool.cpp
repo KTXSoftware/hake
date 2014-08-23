@@ -20,8 +20,8 @@ namespace {
 	u32 sample(u32* image, int w, int h, float x, float y) {
 		float posx = x * w;
 		float posy = y * h;
-		int xx = k_round(posx);
-		int yy = k_round(posy);
+		int xx = (int)posx;
+		int yy = (int)posy;
 		xx = std::min(std::max(0, xx), w - 1);
 		yy = std::min(std::max(0, yy), h - 1);
 		return image[yy * w + xx];
